@@ -1,0 +1,51 @@
+{
+  "run_id": "run_2eff35d313f040cda594a778a76566cb",
+  "case_id": "save_failure.input",
+  "execution_mode": "mock",
+  "model_name": "offline-scripted-simulator",
+  "execution_status": "COMPLETED",
+  "decision_steps": 5,
+  "tool_calls": 4,
+  "outcomes": [
+    {
+      "material_id": "M01",
+      "status": "SAVE_FAILED",
+      "review": {
+        "material_id": "M01",
+        "review_status": "PASS",
+        "risk_level": "LOW",
+        "risk_reasons": [],
+        "matched_rules": [],
+        "missing_fields": [],
+        "requires_manual_review": false
+      },
+      "original_publish_time": "2027-01-15T16:00:00-05:00",
+      "suggested_publish_time": null,
+      "pending_items": [],
+      "save_status": "SAVE_FAILED",
+      "draft": null
+    }
+  ],
+  "errors": [
+    {
+      "code": "SAVE_FAILED",
+      "tool_name": "save_schedule_draft",
+      "message": "OperationalError"
+    }
+  ],
+  "token_usage_per_request": [
+    "unavailable",
+    "unavailable",
+    "unavailable",
+    "unavailable",
+    "unavailable"
+  ],
+  "publication_capability": false,
+  "fault_injection": true,
+  "finished_at": "2026-11-01T13:34:16.048025+00:00",
+  "trace_files": {
+    "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\mock_20261101T133412Z_80c3d3d9\\run_2eff35d313f040cda594a778a76566cb\\events.jsonl",
+    "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\mock_20261101T133412Z_80c3d3d9\\run_2eff35d313f040cda594a778a76566cb\\trace.json",
+    "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\mock_20261101T133412Z_80c3d3d9\\run_2eff35d313f040cda594a778a76566cb\\result.json"
+  }
+}

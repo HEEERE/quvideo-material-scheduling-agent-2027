@@ -1,0 +1,6 @@
+Actual environment-only failed verification, 2026-11-01 UTC
+Command: .venv/Scripts/python -m pytest -q (outside sandbox, after earlier sandbox runs)
+32 passed, 2 warnings, 34 errors in 10.66s
+Pytest could not access temporary directories/cache previously created by the sandbox identity.
+Full original output retained locally in ignored runs/test-results-permission-error.txt.
+Resolution: rerun with a new workspace-contained --basetemp and -o cache_dir. No test cases removed or relaxed.

@@ -1,0 +1,9 @@
+{
+  "disclaimer": "Synthetic demonstration rules, not QuVideo or platform policy.",
+  "required_fields": ["material_id", "title", "material_type", "content_theme", "target_product", "target_market", "language", "target_channel", "copyright_status", "authorization_scope"],
+  "market_languages": {"US": ["en"], "JP": ["ja"], "TW": ["zh-TW"], "GB": ["en"]},
+  "blocked_tags": ["prohibited_content"],
+  "manual_review_tags": ["sensitive_topic", "unverified_claim", "likeness_uncleared"],
+  "channel_blocked_tags": {"TikTok": ["demo_channel_restricted"], "Instagram Reels": [], "YouTube Shorts": [], "InApp": []},
+  "conflict_window_minutes": 60
+}

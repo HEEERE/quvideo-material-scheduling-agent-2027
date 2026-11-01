@@ -1,0 +1,13 @@
+{
+  "request_id": "duplicate-001",
+  "material_ids": [
+    "M01"
+  ],
+  "target_channel": "TikTok",
+  "market": "US",
+  "timezone": "America/New_York",
+  "requested_publish_time": "2027-01-15T16:00:00-05:00",
+  "hard_time_constraint": true,
+  "flexible_time_window": null,
+  "user_confirmations": []
+}

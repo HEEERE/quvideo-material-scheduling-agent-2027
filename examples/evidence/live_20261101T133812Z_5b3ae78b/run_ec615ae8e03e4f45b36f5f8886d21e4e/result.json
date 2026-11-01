@@ -1,0 +1,112 @@
+{
+  "run_id": "run_ec615ae8e03e4f45b36f5f8886d21e4e",
+  "case_id": "save_failure.input",
+  "execution_mode": "live",
+  "model_name": "deepseek-flash",
+  "execution_status": "COMPLETED",
+  "decision_steps": 6,
+  "tool_calls": 5,
+  "outcomes": [
+    {
+      "material_id": "M01",
+      "status": "SAVE_FAILED",
+      "review": {
+        "material_id": "M01",
+        "review_status": "PASS",
+        "risk_level": "LOW",
+        "risk_reasons": [],
+        "matched_rules": [],
+        "missing_fields": [],
+        "requires_manual_review": false
+      },
+      "original_publish_time": "2027-01-15T16:00:00-05:00",
+      "suggested_publish_time": null,
+      "pending_items": [],
+      "save_status": "SAVE_FAILED",
+      "draft": null,
+      "verification_error": null
+    }
+  ],
+  "errors": [
+    {
+      "code": "SAVE_FAILED",
+      "tool_name": "save_schedule_draft",
+      "message": "OperationalError"
+    },
+    {
+      "code": "SAVE_FAILED",
+      "tool_name": "save_schedule_draft",
+      "message": "OperationalError"
+    }
+  ],
+  "token_usage_per_request": [
+    {
+      "prompt_tokens": 1582,
+      "completion_tokens": 77,
+      "total_tokens": 1659,
+      "prompt_tokens_details": {
+        "cached_tokens": 1408
+      },
+      "prompt_cache_hit_tokens": 1408,
+      "prompt_cache_miss_tokens": 174
+    },
+    {
+      "prompt_tokens": 1805,
+      "completion_tokens": 70,
+      "total_tokens": 1875,
+      "prompt_tokens_details": {
+        "cached_tokens": 1536
+      },
+      "prompt_cache_hit_tokens": 1536,
+      "prompt_cache_miss_tokens": 269
+    },
+    {
+      "prompt_tokens": 1936,
+      "completion_tokens": 103,
+      "total_tokens": 2039,
+      "prompt_tokens_details": {
+        "cached_tokens": 1792
+      },
+      "prompt_cache_hit_tokens": 1792,
+      "prompt_cache_miss_tokens": 144
+    },
+    {
+      "prompt_tokens": 2187,
+      "completion_tokens": 152,
+      "total_tokens": 2339,
+      "prompt_tokens_details": {
+        "cached_tokens": 1920
+      },
+      "prompt_cache_hit_tokens": 1920,
+      "prompt_cache_miss_tokens": 267
+    },
+    {
+      "prompt_tokens": 2388,
+      "completion_tokens": 138,
+      "total_tokens": 2526,
+      "prompt_tokens_details": {
+        "cached_tokens": 2176
+      },
+      "prompt_cache_hit_tokens": 2176,
+      "prompt_cache_miss_tokens": 212
+    },
+    {
+      "prompt_tokens": 2575,
+      "completion_tokens": 282,
+      "total_tokens": 2857,
+      "prompt_tokens_details": {
+        "cached_tokens": 2432
+      },
+      "prompt_cache_hit_tokens": 2432,
+      "prompt_cache_miss_tokens": 143
+    }
+  ],
+  "publication_capability": false,
+  "fault_injection": true,
+  "finished_at": "2026-11-01T13:39:27.424021+00:00",
+  "trace_files": {
+    "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T133812Z_5b3ae78b\\run_ec615ae8e03e4f45b36f5f8886d21e4e\\events.jsonl",
+    "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T133812Z_5b3ae78b\\run_ec615ae8e03e4f45b36f5f8886d21e4e\\trace.json",
+    "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T133812Z_5b3ae78b\\run_ec615ae8e03e4f45b36f5f8886d21e4e\\result.json"
+  }
+}

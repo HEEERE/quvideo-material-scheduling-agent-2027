@@ -1,0 +1,4 @@
+{
+  "M02": {"source":"synthetic_license_register","reliable":true,"patch":{},"note":"Music authorization is still unavailable; ask user for license and scope."},
+  "M07": {"source":"synthetic_license_register","reliable":true,"patch":{"copyright_status":"AUTHORIZED","authorization_scope":["TikTok:US"]},"note":"Synthetic register contains the missing license record."}
+}

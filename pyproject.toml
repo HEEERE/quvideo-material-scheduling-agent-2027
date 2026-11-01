@@ -1,0 +1,9 @@
+[project]
+name = "material-scheduling-agent"
+version = "0.1.0"
+description = "Synthetic material review and draft scheduling with native tool calling"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

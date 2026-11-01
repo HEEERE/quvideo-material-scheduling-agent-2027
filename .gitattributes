@@ -1,0 +1,4 @@
+* text=auto eol=lf
+# Preserve original execution evidence byte-for-byte.
+examples/evidence/** -text
+examples/test-results*.txt -text

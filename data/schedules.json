@@ -1,0 +1,5 @@
+[
+  {"schedule_id":"SYN-US-1800","target_channel":"TikTok","market":"US","publish_time":"2027-01-15T18:00:00-05:00","status":"CONFIRMED"},
+  {"schedule_id":"SYN-US-2000","target_channel":"TikTok","market":"US","publish_time":"2027-01-15T20:00:00-05:00","status":"CONFIRMED"},
+  {"schedule_id":"SYN-JP-1800","target_channel":"Instagram Reels","market":"JP","publish_time":"2027-01-15T18:00:00+09:00","status":"CANCELLED"}
+]

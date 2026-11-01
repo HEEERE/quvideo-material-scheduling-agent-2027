@@ -1,0 +1,61 @@
+{
+  "run_id": "run_6933f9d8e84844aa8c3a011147c66d0b",
+  "case_id": "duplicate.input",
+  "execution_mode": "mock",
+  "model_name": "offline-scripted-simulator",
+  "execution_status": "COMPLETED",
+  "decision_steps": 5,
+  "tool_calls": 4,
+  "outcomes": [
+    {
+      "material_id": "M01",
+      "status": "DRAFT_SAVED",
+      "review": {
+        "material_id": "M01",
+        "review_status": "PASS",
+        "risk_level": "LOW",
+        "risk_reasons": [],
+        "matched_rules": [],
+        "missing_fields": [],
+        "requires_manual_review": false
+      },
+      "original_publish_time": "2027-01-15T16:00:00-05:00",
+      "suggested_publish_time": "2027-01-15T16:00:00-05:00",
+      "pending_items": [],
+      "save_status": "ALREADY_EXISTS",
+      "draft": {
+        "draft_id": "draft_68fd1afa914e492fba0a36fc803c5665",
+        "request_fingerprint": "b550d253b6e20ffdfa797101e355c7cb87c3174e3dacc7defd6b449b2bbd4bbd",
+        "material_id": "M01",
+        "original_publish_time": "2027-01-15T16:00:00-05:00",
+        "suggested_publish_time": "2027-01-15T16:00:00-05:00",
+        "target_channel": "TikTok",
+        "market": "US",
+        "timezone": "America/New_York",
+        "confirmation_status": "ORIGINAL_REQUEST",
+        "review_status": "PASS",
+        "draft_status": "READY",
+        "risk_reasons": [],
+        "confirmation_evidence": [],
+        "created_at": "2026-11-01T13:34:14.972497Z",
+        "updated_at": "2026-11-01T13:34:14.972497Z"
+      }
+    }
+  ],
+  "errors": [],
+  "token_usage_per_request": [
+    "unavailable",
+    "unavailable",
+    "unavailable",
+    "unavailable",
+    "unavailable"
+  ],
+  "publication_capability": false,
+  "fault_injection": false,
+  "finished_at": "2026-11-01T13:34:15.476873+00:00",
+  "trace_files": {
+    "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\mock_20261101T133412Z_80c3d3d9\\run_6933f9d8e84844aa8c3a011147c66d0b\\events.jsonl",
+    "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\mock_20261101T133412Z_80c3d3d9\\run_6933f9d8e84844aa8c3a011147c66d0b\\trace.json",
+    "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\mock_20261101T133412Z_80c3d3d9\\run_6933f9d8e84844aa8c3a011147c66d0b\\result.json"
+  }
+}

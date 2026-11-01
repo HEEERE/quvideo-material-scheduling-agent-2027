@@ -1,0 +1,12 @@
+{
+  "first_verified_clock_utc": "2026-11-01T13:23:56+00:00",
+  "report_generated_at_utc": "2026-11-01T13:44:03.384690+00:00",
+  "client_timezone": "Asia/Taipei",
+  "measurement": "Wall-clock interval from first tool clock reading to report generation; not human labor time or model-only compute time.",
+  "pytest_passed": 66,
+  "pytest_measured_seconds": 2.26,
+  "latest_live_report": "examples/evidence/live_20261101T133812Z_5b3ae78b/evaluation.json",
+  "latest_mock_report": "examples/evidence/mock_20261101T133805Z_4ac28914/evaluation.json",
+  "source_fingerprint": "4fa41e1a11454b4590c2f8fad0c985eb77e684a91f2545fa8ab203f4182955d8",
+  "verified_elapsed_seconds": 1207.385
+}

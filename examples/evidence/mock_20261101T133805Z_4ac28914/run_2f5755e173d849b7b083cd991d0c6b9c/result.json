@@ -1,0 +1,50 @@
+{
+  "run_id": "run_2f5755e173d849b7b083cd991d0c6b9c",
+  "case_id": "risk.input",
+  "execution_mode": "mock",
+  "model_name": "offline-scripted-simulator",
+  "execution_status": "COMPLETED",
+  "decision_steps": 3,
+  "tool_calls": 2,
+  "outcomes": [
+    {
+      "material_id": "M03",
+      "status": "BLOCKED",
+      "review": {
+        "material_id": "M03",
+        "review_status": "BLOCKED",
+        "risk_level": "HIGH",
+        "risk_reasons": [
+          "Synthetic license register explicitly prohibits use"
+        ],
+        "matched_rules": [
+          "LICENSE_PROHIBITED"
+        ],
+        "missing_fields": [],
+        "requires_manual_review": true
+      },
+      "original_publish_time": "2027-01-15T16:00:00-05:00",
+      "suggested_publish_time": null,
+      "pending_items": [
+        "Synthetic license register explicitly prohibits use"
+      ],
+      "save_status": "NOT_ATTEMPTED",
+      "draft": null,
+      "verification_error": null
+    }
+  ],
+  "errors": [],
+  "token_usage_per_request": [
+    "unavailable",
+    "unavailable",
+    "unavailable"
+  ],
+  "publication_capability": false,
+  "fault_injection": false,
+  "finished_at": "2026-11-01T13:38:07.259575+00:00",
+  "trace_files": {
+    "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\mock_20261101T133805Z_4ac28914\\run_2f5755e173d849b7b083cd991d0c6b9c\\events.jsonl",
+    "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\mock_20261101T133805Z_4ac28914\\run_2f5755e173d849b7b083cd991d0c6b9c\\trace.json",
+    "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\mock_20261101T133805Z_4ac28914\\run_2f5755e173d849b7b083cd991d0c6b9c\\result.json"
+  }
+}
