@@ -37,7 +37,7 @@ def main():
         elif selected:
             report = selected[-1]
             for case in report["cases"]:
-                path = ROOT / case["trace"]["events"]
+                path = ROOT / case["trace"]["events"].replace("\\", "/")
                 first = json.loads(path.read_text(encoding="utf-8").splitlines()[0])
                 manifest = first.get("source_files_sha256")
                 if not manifest:

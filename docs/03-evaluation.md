@@ -18,12 +18,12 @@
 
 | 场景 | 实际输入 | 预期 | 实际输出 | 断言 | 原始简洁 Trace |
 |---|---|---|---|---|---|
-| normal | [examples\normal.input.json](../examples\normal.input.json) | PASS，原时间 READY | DRAFT_SAVED / SAVED / READY | 通过 | [Trace](../examples/evidence/live_20261101T133812Z_5b3ae78b/run_6cafb61e09634eb88a089de23e05c79d/trace.json) |
-| missing | [examples\missing.input.json](../examples\missing.input.json) | 补查仍缺授权，不保存 | NEEDS_INFO / NOT_ATTEMPTED | 通过 | [Trace](../examples/evidence/live_20261101T133812Z_5b3ae78b/run_180b08492e394a028007a66bd8623b80/trace.json) |
-| risk | [examples\risk.input.json](../examples\risk.input.json) | 明确禁止，BLOCKED | BLOCKED / NOT_ATTEMPTED | 通过 | [Trace](../examples/evidence/live_20261101T133812Z_5b3ae78b/run_9783558da43d4735bddb9192402ac833/trace.json) |
-| conflict | [examples\conflict.input.json](../examples\conflict.input.json) | 主动另查，硬性替代 PENDING | DRAFT_SAVED / SAVED / AWAITING_CONFIRMATION | 通过 | [Trace](../examples/evidence/live_20261101T133812Z_5b3ae78b/run_38a1a0aea76a4def9111653a15e1867d/trace.json) |
-| duplicate | [examples\duplicate.input.json](../examples\duplicate.input.json) | 跨进程同 ID，仅一行 | DRAFT_SAVED / ALREADY_EXISTS / READY | 通过 | [Trace](../examples/evidence/live_20261101T133812Z_5b3ae78b/run_de15a6f68de046c7a446eb1d32e28ab0/trace.json) |
-| save_failure | [examples\save_failure.input.json](../examples\save_failure.input.json) | 回滚，明确未保存 | SAVE_FAILED / SAVE_FAILED | 通过 | [Trace](../examples/evidence/live_20261101T133812Z_5b3ae78b/run_ec615ae8e03e4f45b36f5f8886d21e4e/trace.json) |
+| normal | [examples/normal.input.json](../examples/normal.input.json) | PASS，原时间 READY | DRAFT_SAVED / SAVED / READY | 通过 | [Trace](../examples/evidence/live_20261101T133812Z_5b3ae78b/run_6cafb61e09634eb88a089de23e05c79d/trace.json) |
+| missing | [examples/missing.input.json](../examples/missing.input.json) | 补查仍缺授权，不保存 | NEEDS_INFO / NOT_ATTEMPTED | 通过 | [Trace](../examples/evidence/live_20261101T133812Z_5b3ae78b/run_180b08492e394a028007a66bd8623b80/trace.json) |
+| risk | [examples/risk.input.json](../examples/risk.input.json) | 明确禁止，BLOCKED | BLOCKED / NOT_ATTEMPTED | 通过 | [Trace](../examples/evidence/live_20261101T133812Z_5b3ae78b/run_9783558da43d4735bddb9192402ac833/trace.json) |
+| conflict | [examples/conflict.input.json](../examples/conflict.input.json) | 主动另查，硬性替代 PENDING | DRAFT_SAVED / SAVED / AWAITING_CONFIRMATION | 通过 | [Trace](../examples/evidence/live_20261101T133812Z_5b3ae78b/run_38a1a0aea76a4def9111653a15e1867d/trace.json) |
+| duplicate | [examples/duplicate.input.json](../examples/duplicate.input.json) | 跨进程同 ID，仅一行 | DRAFT_SAVED / ALREADY_EXISTS / READY | 通过 | [Trace](../examples/evidence/live_20261101T133812Z_5b3ae78b/run_de15a6f68de046c7a446eb1d32e28ab0/trace.json) |
+| save_failure | [examples/save_failure.input.json](../examples/save_failure.input.json) | 回滚，明确未保存 | SAVE_FAILED / SAVE_FAILED | 通过 | [Trace](../examples/evidence/live_20261101T133812Z_5b3ae78b/run_ec615ae8e03e4f45b36f5f8886d21e4e/trace.json) |
 
 每份 evaluation.json 记录输入路径、实际退出码、完整结果、持久化数据库快照、工具路径、Trace 链接；duplicate 包含两个独立进程的结果，第二次使用同一数据库。数据库文件作为运行缓存被 Git 忽略，快照和事务测试供复核。save_failure 的退出码 4 是明确失败处理的预期结果，COMPLETED 只表示场景已处理完，不表示成功保存。
 

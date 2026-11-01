@@ -20,7 +20,7 @@ def latest(mode):
 
 
 def portable(value):
-    return Path(value).as_posix()
+    return Path(value.replace("\\", "/")).as_posix()
 
 
 def main():
@@ -43,7 +43,8 @@ def main():
         actual = out["status"] + " / " + out["save_status"]
         if draft:
             actual += " / " + draft["draft_status"]
-        rows.append(f"| {case['case_id']} | [{case['input']}](../{case['input']}) | {expected[case['case_id']]} | {actual} | {'通过' if case['passed'] else '失败'} | [Trace](../{portable(case['trace']['trace'])}) |")
+        input_path = portable(case["input"])
+        rows.append(f"| {case['case_id']} | [{input_path}](../{input_path}) | {expected[case['case_id']]} | {actual} | {'通过' if case['passed'] else '失败'} | [Trace](../{portable(case['trace']['trace'])}) |")
     evaluation = f"""# 实际评估记录
 
 本文件由 `scripts/build_report.py` 从原始评估 JSON 和 pytest 输出生成，未修改 Trace。最后一批真实验证：{live['started_at']} 至 {live['finished_at']}。

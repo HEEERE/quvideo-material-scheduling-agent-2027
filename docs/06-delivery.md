@@ -17,6 +17,8 @@ gh run list --repo HEEERE/quvideo-material-scheduling-agent-2027
 
 `.gitattributes` 固定源码为 LF，避免跨平台换行符导致来源哈希不一致。原始运行证据按二进制属性保留字节，不做换行规范化。历史探索记录和失败恢复记录保留原样。
 
+评审索引和核查脚本会规范化 Windows 证据记录中的路径分隔符，文档使用 POSIX 相对链接；CI 同时在 Linux 和 Windows 运行交付核查。
+
 虚拟环境、`.env`、SQLite 数据库和运行缓存保留在本机忽略目录。评估报告提供真实保存记录的数据库快照；评审可用 README 命令重新生成数据库并验证幂等行为。没有提交真实 API Key、真实公司数据或本机完整临时错误堆栈。
 
 AI 辅助和人工贡献范围见 [AI 使用记录](04-ai-usage.md)。项目当前限制见 [评估报告](03-evaluation.md)。未添加发布接口。
