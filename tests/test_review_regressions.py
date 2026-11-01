@@ -247,3 +247,33 @@ def test_candidate_boundaries_follow_changed_occupancy(request_data, registry_fa
     hints = {h["publish_time"] for h in result["candidate_time_hints"]}
     assert "2027-01-15T19:30:00-05:00" in hints
     assert OLD not in hints
+
+
+def test_fresh_committed_slot_overrides_older_conflict_observation(request_data, registry_factory, tmp_path):
+    request = ScheduleRequest.model_validate({**request_data, "requested_publish_time": "2027-01-15T18:00:00-05:00"})
+    registry = registry_factory(request)
+    assert prepare(registry)[1]["available"] is False
+    path = tmp_path / "cancel.json"
+    path.write_text(json.dumps([{"schedule_id": "SYN-US-1800", "target_channel": "TikTok", "market": "US",
+                                  "publish_time": request.requested_publish_time.isoformat(), "status": "CANCELLED"}]), encoding="utf-8")
+    registry.repository.sync_schedules(path)
+    result = call(registry, "save_schedule_draft", suggested_publish_time=request.requested_publish_time.isoformat(), confirmation_status="ORIGINAL_REQUEST")
+    assert result["status"] == "SAVED"
+    outcome = registry.outcomes()[0]
+    assert outcome["status"] == "DRAFT_SAVED"
+    assert outcome["schedule_check"]["available"] is True
+    assert outcome["pending_items"] == []
+
+
+def test_rejected_model_save_keeps_user_confirmation_requirement(request_data, registry_factory):
+    request = ScheduleRequest.model_validate({**request_data, "requested_publish_time": "2027-01-15T18:00:00-05:00"})
+    registry = registry_factory(request)
+    assert prepare(registry)[1]["available"] is False
+    result = call(registry, "save_schedule_draft", suggested_publish_time=request.requested_publish_time.isoformat(), confirmation_status="ORIGINAL_REQUEST")
+    assert result["status"] == "REJECTED_BY_POLICY"
+    outcome = registry.outcomes()[0]
+    assert outcome["status"] == "NEEDS_CONFIRMATION"
+    assert "flexible_time_window" in " ".join(outcome["pending_items"])
+    assert outcome["schedule_blockers"][0]["code"] == "REQUESTED_SLOT_UNAVAILABLE"
+    assert any(b["code"] == "SCHEDULE_POLICY_REJECTED" for b in outcome["schedule_blockers"])
+    assert registry.repository.all() == []

@@ -8,14 +8,14 @@
 
 | 交付项 | 可核查结果 |
 |---|---|
-| 工程测试 | [93 passed](examples/test-results.txt) |
-| 六场景真实模型验证 | [6/6，DeepSeek deepseek-flash](examples/evidence/live_20261101T141612Z_81be7847/evaluation.json) |
-| 离线验证 | [6/6，明确标为 Mock](examples/evidence/mock_20261101T141619Z_8d4782c5/evaluation.json) |
-| 真实正常路径 | [原始 Trace](examples/evidence/live_20261101T141612Z_81be7847/run_e57ef417ea0145f08b3794bd5fb1258e/trace.json) |
-| 真实冲突路径 | [原始 Trace](examples/evidence/live_20261101T141612Z_81be7847/run_4464ab0d4ac84d73aab7b5abf319ea39/trace.json) |
+| 工程测试 | [95 passed](examples/test-results.txt) |
+| 六场景真实模型验证 | [6/6，DeepSeek deepseek-flash](examples/evidence/live_20261101T142648Z_b223f7aa/evaluation.json) |
+| 离线验证 | [6/6，明确标为 Mock](examples/evidence/mock_20261101T142651Z_2bd9c46b/evaluation.json) |
+| 真实正常路径 | [原始 Trace](examples/evidence/live_20261101T142648Z_b223f7aa/run_6b9cef3f6ce14f02a95b9cf8138d440b/trace.json) |
+| 真实冲突路径 | [原始 Trace](examples/evidence/live_20261101T142648Z_b223f7aa/run_c1ed76dd39534e1f9d62fc5ddf29264e/trace.json) |
 | 真实错误与恢复 | [模型错误确认状态被 Guard 拒绝并改正](examples/evidence/live_20261101T133154Z_18c0964f/evaluation.json) |
 | 逐项验收与限制 | [评估矩阵](docs/03-evaluation.md) |
-| 本次审核问题修复 | [真实模型 2/2](examples/evidence/review_live_20261101T141619Z_0c75a215/regressions.json)、[修复说明](docs/07-review-fixes.md) |
+| 本次审核问题修复 | [真实模型 2/2](examples/evidence/review_live_20261101T142650Z_624f8ade/regressions.json)、[修复说明](docs/07-review-fixes.md) |
 
 ## 安装
 

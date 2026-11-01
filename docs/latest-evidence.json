@@ -1,11 +1,11 @@
 {
-  "report_generated_at_utc": "2026-11-01T14:19:34.083445+00:00",
+  "report_generated_at_utc": "2026-11-01T14:30:09.483646+00:00",
   "client_timezone": "Asia/Taipei",
-  "pytest_passed": 93,
-  "pytest_measured_seconds": 6.49,
-  "latest_live_report": "examples/evidence/live_20261101T141612Z_81be7847/evaluation.json",
-  "latest_mock_report": "examples/evidence/mock_20261101T141619Z_8d4782c5/evaluation.json",
-  "source_fingerprint": "35c99bb683a74412ce9533312292fcbb85a0d34071e5acb15aca87a8d9fc3e9b",
-  "review_live_report": "examples/evidence/review_live_20261101T141619Z_0c75a215/regressions.json",
-  "review_mock_report": "examples/evidence/review_mock_20261101T141627Z_4f8aad77/regressions.json"
+  "pytest_passed": 95,
+  "pytest_measured_seconds": 7.17,
+  "latest_live_report": "examples/evidence/live_20261101T142648Z_b223f7aa/evaluation.json",
+  "latest_mock_report": "examples/evidence/mock_20261101T142651Z_2bd9c46b/evaluation.json",
+  "source_fingerprint": "da7047e2cf24911decd980632711d71f5efe0df98f83f81825b9105b81f6a2af",
+  "review_live_report": "examples/evidence/review_live_20261101T142650Z_624f8ade/regressions.json",
+  "review_mock_report": "examples/evidence/review_mock_20261101T142700Z_6da16e38/regressions.json"
 }

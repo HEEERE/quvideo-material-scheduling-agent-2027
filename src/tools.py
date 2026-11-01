@@ -118,10 +118,9 @@ class ToolRegistry:
             return [{"code": "EXISTING_DRAFT_CONFLICT", "publish_time": current_slot["publish_time"],
                      "conflicts": current_slot["conflicts"], "requires_user_input": True,
                      "message": "The persisted draft time is now occupied. Replan a pending suggestion or explicitly confirm a new available time."}]
-        if saved.get("status") == "REJECTED_BY_POLICY":
-            reason = saved.get("error", "Policy rejected the draft")
-            return [{"code": "SCHEDULE_POLICY_REJECTED", "requires_user_input": reason.startswith("EXISTING_DRAFT_INVALID"),
-                     "message": reason}]
+        reason = saved.get("error", "Policy rejected the draft")
+        policy_blockers = ([{"code": "SCHEDULE_POLICY_REJECTED", "requires_user_input": reason.startswith("EXISTING_DRAFT_INVALID"),
+                            "message": reason}] if saved.get("status") == "REJECTED_BY_POLICY" else [])
         observations = self.schedule_observations.get(mid, {})
         original = observations.get(utc_iso(self.request.requested_publish_time))
         if original and not original["available"]:
@@ -131,13 +130,15 @@ class ToolRegistry:
                 return [{"code": "REQUESTED_SLOT_UNAVAILABLE", "publish_time": original["publish_time"],
                          "conflicts": original["conflicts"], "requires_user_input": True,
                          "requested_fields": ["flexible_time_window", "user_confirmations"],
-                         "message": "Requested publish time is occupied. Provide a flexible_time_window or explicit user_confirmations for an available alternative; the hard requirement remains unchanged."}]
+                         "message": "Requested publish time is occupied. Provide a flexible_time_window or explicit user_confirmations for an available alternative; the hard requirement remains unchanged."}] + policy_blockers
+            if policy_blockers:
+                return policy_blockers
             available = [slot["publish_time"] for slot in observations.values() if slot["available"]]
             return [{"code": "ALTERNATIVE_NOT_SAVED" if available else "NO_AVAILABLE_QUERIED_SLOT",
                      "publish_time": original["publish_time"], "conflicts": original["conflicts"],
                      "queried_available_times": available, "requires_user_input": False,
                      "message": "The requested time conflicts. Query and save a permitted alternative, or ask to expand the window if further searching cannot resolve the conflict."}]
-        return []
+        return policy_blockers
 
     def outcomes(self) -> list[dict]:
         outcomes = []
@@ -167,7 +168,8 @@ class ToolRegistry:
                 status = "NOT_FOUND"
             else:
                 status = "INCOMPLETE"
-            blockers = self._schedule_blockers(mid, saved, schedule_check) if status not in {"NEEDS_INFO", "NEEDS_REVIEW", "BLOCKED", "NOT_FOUND"} else []
+            current_draft_valid = status == "DRAFT_SAVED" and schedule_check and schedule_check["available"]
+            blockers = self._schedule_blockers(mid, saved, schedule_check) if not current_draft_valid and status not in {"NEEDS_INFO", "NEEDS_REVIEW", "BLOCKED", "NOT_FOUND"} else []
             if status != "SAVE_FAILED" and verification_error is None and any(b["requires_user_input"] for b in blockers):
                 status = "NEEDS_CONFIRMATION"
             # A successful, still-valid pending draft needs confirmation of its exact time.

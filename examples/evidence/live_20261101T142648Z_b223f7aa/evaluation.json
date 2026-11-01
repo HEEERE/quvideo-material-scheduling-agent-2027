@@ -1,0 +1,962 @@
+{
+  "execution_mode": "live",
+  "started_at": "2026-11-01T14:26:48.343521+00:00",
+  "finished_at": "2026-11-01T14:28:25.168547+00:00",
+  "python": "3.12.7",
+  "cases": [
+    {
+      "case_id": "normal",
+      "passed": true,
+      "criterion": "PASS review + committed READY draft",
+      "input": "examples\\normal.input.json",
+      "exit_code": 0,
+      "result": {
+        "run_id": "run_6b9cef3f6ce14f02a95b9cf8138d440b",
+        "case_id": "normal.input",
+        "execution_mode": "live",
+        "model_name": "deepseek-flash",
+        "execution_status": "COMPLETED",
+        "decision_steps": 5,
+        "tool_calls": 4,
+        "outcomes": [
+          {
+            "material_id": "M01",
+            "status": "DRAFT_SAVED",
+            "review": {
+              "material_id": "M01",
+              "review_status": "PASS",
+              "risk_level": "LOW",
+              "risk_reasons": [],
+              "matched_rules": [],
+              "missing_fields": [],
+              "requires_manual_review": false
+            },
+            "original_publish_time": "2027-01-15T16:00:00-05:00",
+            "suggested_publish_time": "2027-01-15T16:00:00-05:00",
+            "pending_items": [],
+            "schedule_blockers": [],
+            "schedule_check": {
+              "available": true,
+              "publish_time": "2027-01-15T16:00:00-05:00",
+              "conflicts": [],
+              "conflict_rule": "Same channel and market; start times less than 60 minutes apart conflict. READY drafts reserve; pending suggestions do not.",
+              "search_window": null,
+              "query_horizon_days": 7,
+              "minimum_spacing_minutes": 60,
+              "checked_at": "2026-11-01T14:27:03.765485+00:00",
+              "candidate_time_hints": [],
+              "hint": "Exact minimum-spacing boundaries are legal. Candidate hints have NOT been checked for availability: choose and query them yourself. No alternative is implicitly approved."
+            },
+            "save_status": "SAVED",
+            "draft": {
+              "draft_id": "draft_40de53593b524da08874e1e90ff5ed2a",
+              "request_fingerprint": "6097ddda9eed66e25f913a7c970651fa6f3816347e478bd25fb745079101ea3e",
+              "material_id": "M01",
+              "original_publish_time": "2027-01-15T16:00:00-05:00",
+              "suggested_publish_time": "2027-01-15T16:00:00-05:00",
+              "target_channel": "TikTok",
+              "market": "US",
+              "timezone": "America/New_York",
+              "confirmation_status": "ORIGINAL_REQUEST",
+              "review_status": "PASS",
+              "draft_status": "READY",
+              "risk_reasons": [],
+              "confirmation_evidence": [],
+              "created_at": "2026-11-01T14:27:00.268263Z",
+              "updated_at": "2026-11-01T14:27:00.268263Z",
+              "revision": 1
+            },
+            "verification_error": null
+          }
+        ],
+        "errors": [],
+        "token_usage_per_request": [
+          {
+            "prompt_tokens": 1774,
+            "completion_tokens": 71,
+            "total_tokens": 1845,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 1774
+          },
+          {
+            "prompt_tokens": 2001,
+            "completion_tokens": 70,
+            "total_tokens": 2071,
+            "prompt_tokens_details": {
+              "cached_tokens": 1792
+            },
+            "prompt_cache_hit_tokens": 1792,
+            "prompt_cache_miss_tokens": 209
+          },
+          {
+            "prompt_tokens": 2132,
+            "completion_tokens": 114,
+            "total_tokens": 2246,
+            "prompt_tokens_details": {
+              "cached_tokens": 1920
+            },
+            "prompt_cache_hit_tokens": 1920,
+            "prompt_cache_miss_tokens": 212
+          },
+          {
+            "prompt_tokens": 2418,
+            "completion_tokens": 148,
+            "total_tokens": 2566,
+            "prompt_tokens_details": {
+              "cached_tokens": 2176
+            },
+            "prompt_cache_hit_tokens": 2176,
+            "prompt_cache_miss_tokens": 242
+          },
+          {
+            "prompt_tokens": 3035,
+            "completion_tokens": 153,
+            "total_tokens": 3188,
+            "prompt_tokens_details": {
+              "cached_tokens": 2560
+            },
+            "prompt_cache_hit_tokens": 2560,
+            "prompt_cache_miss_tokens": 475
+          }
+        ],
+        "publication_capability": false,
+        "fault_injection": false,
+        "finished_at": "2026-11-01T14:27:03.768711+00:00",
+        "trace_files": {
+          "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_6b9cef3f6ce14f02a95b9cf8138d440b\\events.jsonl",
+          "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_6b9cef3f6ce14f02a95b9cf8138d440b\\trace.json",
+          "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_6b9cef3f6ce14f02a95b9cf8138d440b\\result.json"
+        }
+      },
+      "database_snapshot": [
+        {
+          "draft_id": "draft_40de53593b524da08874e1e90ff5ed2a",
+          "request_fingerprint": "6097ddda9eed66e25f913a7c970651fa6f3816347e478bd25fb745079101ea3e",
+          "material_id": "M01",
+          "original_publish_time": "2027-01-15T16:00:00-05:00",
+          "suggested_publish_time": "2027-01-15T16:00:00-05:00",
+          "target_channel": "TikTok",
+          "market": "US",
+          "timezone": "America/New_York",
+          "confirmation_status": "ORIGINAL_REQUEST",
+          "review_status": "PASS",
+          "draft_status": "READY",
+          "risk_reasons": [],
+          "confirmation_evidence": [],
+          "created_at": "2026-11-01T14:27:00.268263Z",
+          "updated_at": "2026-11-01T14:27:00.268263Z",
+          "revision": 1
+        }
+      ],
+      "tool_path": [
+        "read_material",
+        "check_review_rules",
+        "query_schedule",
+        "save_schedule_draft"
+      ],
+      "previous_result": null,
+      "trace": {
+        "events": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_6b9cef3f6ce14f02a95b9cf8138d440b\\events.jsonl",
+        "trace": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_6b9cef3f6ce14f02a95b9cf8138d440b\\trace.json",
+        "result": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_6b9cef3f6ce14f02a95b9cf8138d440b\\result.json"
+      }
+    },
+    {
+      "case_id": "missing",
+      "passed": true,
+      "criterion": "Missing authorization retained; no draft",
+      "input": "examples\\missing.input.json",
+      "exit_code": 0,
+      "result": {
+        "run_id": "run_493771367c8e48de96e3cbf8b9bf9310",
+        "case_id": "missing.input",
+        "execution_mode": "live",
+        "model_name": "deepseek-flash",
+        "execution_status": "COMPLETED",
+        "decision_steps": 3,
+        "tool_calls": 3,
+        "outcomes": [
+          {
+            "material_id": "M02",
+            "status": "NEEDS_INFO",
+            "review": {
+              "material_id": "M02",
+              "review_status": "NEEDS_INFO",
+              "risk_level": "MEDIUM",
+              "risk_reasons": [
+                "Missing required metadata: copyright_status, authorization_scope",
+                "Reliable copyright authorization must be supplied"
+              ],
+              "matched_rules": [
+                "METADATA_REQUIRED",
+                "LICENSE_UNKNOWN"
+              ],
+              "missing_fields": [
+                "authorization_scope",
+                "copyright_status"
+              ],
+              "requires_manual_review": true
+            },
+            "original_publish_time": "2027-01-15T16:00:00-05:00",
+            "suggested_publish_time": null,
+            "pending_items": [
+              "Missing required metadata: copyright_status, authorization_scope",
+              "Reliable copyright authorization must be supplied"
+            ],
+            "schedule_blockers": [],
+            "schedule_check": null,
+            "save_status": "NOT_ATTEMPTED",
+            "draft": null,
+            "verification_error": null
+          }
+        ],
+        "errors": [],
+        "token_usage_per_request": [
+          {
+            "prompt_tokens": 1774,
+            "completion_tokens": 77,
+            "total_tokens": 1851,
+            "prompt_tokens_details": {
+              "cached_tokens": 1536
+            },
+            "prompt_cache_hit_tokens": 1536,
+            "prompt_cache_miss_tokens": 238
+          },
+          {
+            "prompt_tokens": 2009,
+            "completion_tokens": 160,
+            "total_tokens": 2169,
+            "prompt_tokens_details": {
+              "cached_tokens": 1792
+            },
+            "prompt_cache_hit_tokens": 1792,
+            "prompt_cache_miss_tokens": 217
+          },
+          {
+            "prompt_tokens": 2459,
+            "completion_tokens": 266,
+            "total_tokens": 2725,
+            "prompt_tokens_details": {
+              "cached_tokens": 2048
+            },
+            "prompt_cache_hit_tokens": 2048,
+            "prompt_cache_miss_tokens": 411
+          }
+        ],
+        "publication_capability": false,
+        "fault_injection": false,
+        "finished_at": "2026-11-01T14:27:13.430993+00:00",
+        "trace_files": {
+          "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_493771367c8e48de96e3cbf8b9bf9310\\events.jsonl",
+          "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_493771367c8e48de96e3cbf8b9bf9310\\trace.json",
+          "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_493771367c8e48de96e3cbf8b9bf9310\\result.json"
+        }
+      },
+      "database_snapshot": [],
+      "tool_path": [
+        "read_material",
+        "check_review_rules",
+        "lookup_material_info"
+      ],
+      "previous_result": null,
+      "trace": {
+        "events": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_493771367c8e48de96e3cbf8b9bf9310\\events.jsonl",
+        "trace": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_493771367c8e48de96e3cbf8b9bf9310\\trace.json",
+        "result": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_493771367c8e48de96e3cbf8b9bf9310\\result.json"
+      }
+    },
+    {
+      "case_id": "risk",
+      "passed": true,
+      "criterion": "Explicit license prohibition blocked",
+      "input": "examples\\risk.input.json",
+      "exit_code": 0,
+      "result": {
+        "run_id": "run_2eac810da04c49708e15f78f5f388f09",
+        "case_id": "risk.input",
+        "execution_mode": "live",
+        "model_name": "deepseek-flash",
+        "execution_status": "COMPLETED",
+        "decision_steps": 3,
+        "tool_calls": 2,
+        "outcomes": [
+          {
+            "material_id": "M03",
+            "status": "BLOCKED",
+            "review": {
+              "material_id": "M03",
+              "review_status": "BLOCKED",
+              "risk_level": "HIGH",
+              "risk_reasons": [
+                "Synthetic license register explicitly prohibits use"
+              ],
+              "matched_rules": [
+                "LICENSE_PROHIBITED"
+              ],
+              "missing_fields": [],
+              "requires_manual_review": true
+            },
+            "original_publish_time": "2027-01-15T16:00:00-05:00",
+            "suggested_publish_time": null,
+            "pending_items": [
+              "Synthetic license register explicitly prohibits use"
+            ],
+            "schedule_blockers": [],
+            "schedule_check": null,
+            "save_status": "NOT_ATTEMPTED",
+            "draft": null,
+            "verification_error": null
+          }
+        ],
+        "errors": [],
+        "token_usage_per_request": [
+          {
+            "prompt_tokens": 1774,
+            "completion_tokens": 79,
+            "total_tokens": 1853,
+            "prompt_tokens_details": {
+              "cached_tokens": 1536
+            },
+            "prompt_cache_hit_tokens": 1536,
+            "prompt_cache_miss_tokens": 238
+          },
+          {
+            "prompt_tokens": 2023,
+            "completion_tokens": 87,
+            "total_tokens": 2110,
+            "prompt_tokens_details": {
+              "cached_tokens": 1792
+            },
+            "prompt_cache_hit_tokens": 1792,
+            "prompt_cache_miss_tokens": 231
+          },
+          {
+            "prompt_tokens": 2186,
+            "completion_tokens": 226,
+            "total_tokens": 2412,
+            "prompt_tokens_details": {
+              "cached_tokens": 2048
+            },
+            "prompt_cache_hit_tokens": 2048,
+            "prompt_cache_miss_tokens": 138
+          }
+        ],
+        "publication_capability": false,
+        "fault_injection": false,
+        "finished_at": "2026-11-01T14:27:22.902837+00:00",
+        "trace_files": {
+          "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_2eac810da04c49708e15f78f5f388f09\\events.jsonl",
+          "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_2eac810da04c49708e15f78f5f388f09\\trace.json",
+          "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_2eac810da04c49708e15f78f5f388f09\\result.json"
+        }
+      },
+      "database_snapshot": [],
+      "tool_path": [
+        "read_material",
+        "check_review_rules"
+      ],
+      "previous_result": null,
+      "trace": {
+        "events": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_2eac810da04c49708e15f78f5f388f09\\events.jsonl",
+        "trace": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_2eac810da04c49708e15f78f5f388f09\\trace.json",
+        "result": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_2eac810da04c49708e15f78f5f388f09\\result.json"
+      }
+    },
+    {
+      "case_id": "conflict",
+      "passed": true,
+      "criterion": "Hard-time alternative preserved pending confirmation",
+      "input": "examples\\conflict.input.json",
+      "exit_code": 0,
+      "result": {
+        "run_id": "run_c1ed76dd39534e1f9d62fc5ddf29264e",
+        "case_id": "conflict.input",
+        "execution_mode": "live",
+        "model_name": "deepseek-flash",
+        "execution_status": "COMPLETED",
+        "decision_steps": 6,
+        "tool_calls": 5,
+        "outcomes": [
+          {
+            "material_id": "M01",
+            "status": "DRAFT_SAVED",
+            "review": {
+              "material_id": "M01",
+              "review_status": "PASS",
+              "risk_level": "LOW",
+              "risk_reasons": [],
+              "matched_rules": [],
+              "missing_fields": [],
+              "requires_manual_review": false
+            },
+            "original_publish_time": "2027-01-15T18:00:00-05:00",
+            "suggested_publish_time": "2027-01-15T19:00:00-05:00",
+            "pending_items": [
+              "Explicit user confirmation for the alternative time"
+            ],
+            "schedule_blockers": [],
+            "schedule_check": {
+              "available": true,
+              "publish_time": "2027-01-15T19:00:00-05:00",
+              "conflicts": [],
+              "conflict_rule": "Same channel and market; start times less than 60 minutes apart conflict. READY drafts reserve; pending suggestions do not.",
+              "search_window": {
+                "start": "2027-01-15T18:00:00-05:00",
+                "end": "2027-01-15T21:00:00-05:00"
+              },
+              "query_horizon_days": 7,
+              "minimum_spacing_minutes": 60,
+              "checked_at": "2026-11-01T14:27:39.567098+00:00",
+              "candidate_time_hints": [],
+              "hint": "Exact minimum-spacing boundaries are legal. Candidate hints have NOT been checked for availability: choose and query them yourself. No alternative is implicitly approved."
+            },
+            "save_status": "SAVED",
+            "draft": {
+              "draft_id": "draft_aad59f54cf934c5a9b29819cea249416",
+              "request_fingerprint": "fd55322c6b27cbdf78d43f9c0c5e257e6526a967b9e5b9f9533946d7f3030f93",
+              "material_id": "M01",
+              "original_publish_time": "2027-01-15T18:00:00-05:00",
+              "suggested_publish_time": "2027-01-15T19:00:00-05:00",
+              "target_channel": "TikTok",
+              "market": "US",
+              "timezone": "America/New_York",
+              "confirmation_status": "PENDING",
+              "review_status": "PASS",
+              "draft_status": "AWAITING_CONFIRMATION",
+              "risk_reasons": [],
+              "confirmation_evidence": [],
+              "created_at": "2026-11-01T14:27:35.981945Z",
+              "updated_at": "2026-11-01T14:27:35.981945Z",
+              "revision": 1
+            },
+            "verification_error": null
+          }
+        ],
+        "errors": [],
+        "token_usage_per_request": [
+          {
+            "prompt_tokens": 1812,
+            "completion_tokens": 78,
+            "total_tokens": 1890,
+            "prompt_tokens_details": {
+              "cached_tokens": 1664
+            },
+            "prompt_cache_hit_tokens": 1664,
+            "prompt_cache_miss_tokens": 148
+          },
+          {
+            "prompt_tokens": 2046,
+            "completion_tokens": 70,
+            "total_tokens": 2116,
+            "prompt_tokens_details": {
+              "cached_tokens": 1792
+            },
+            "prompt_cache_hit_tokens": 1792,
+            "prompt_cache_miss_tokens": 254
+          },
+          {
+            "prompt_tokens": 2177,
+            "completion_tokens": 113,
+            "total_tokens": 2290,
+            "prompt_tokens_details": {
+              "cached_tokens": 1920
+            },
+            "prompt_cache_hit_tokens": 1920,
+            "prompt_cache_miss_tokens": 257
+          },
+          {
+            "prompt_tokens": 2642,
+            "completion_tokens": 126,
+            "total_tokens": 2768,
+            "prompt_tokens_details": {
+              "cached_tokens": 2176
+            },
+            "prompt_cache_hit_tokens": 2176,
+            "prompt_cache_miss_tokens": 466
+          },
+          {
+            "prompt_tokens": 2980,
+            "completion_tokens": 165,
+            "total_tokens": 3145,
+            "prompt_tokens_details": {
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 292
+          },
+          {
+            "prompt_tokens": 3662,
+            "completion_tokens": 320,
+            "total_tokens": 3982,
+            "prompt_tokens_details": {
+              "cached_tokens": 3072
+            },
+            "prompt_cache_hit_tokens": 3072,
+            "prompt_cache_miss_tokens": 590
+          }
+        ],
+        "publication_capability": false,
+        "fault_injection": false,
+        "finished_at": "2026-11-01T14:27:39.568520+00:00",
+        "trace_files": {
+          "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_c1ed76dd39534e1f9d62fc5ddf29264e\\events.jsonl",
+          "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_c1ed76dd39534e1f9d62fc5ddf29264e\\trace.json",
+          "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_c1ed76dd39534e1f9d62fc5ddf29264e\\result.json"
+        }
+      },
+      "database_snapshot": [
+        {
+          "draft_id": "draft_aad59f54cf934c5a9b29819cea249416",
+          "request_fingerprint": "fd55322c6b27cbdf78d43f9c0c5e257e6526a967b9e5b9f9533946d7f3030f93",
+          "material_id": "M01",
+          "original_publish_time": "2027-01-15T18:00:00-05:00",
+          "suggested_publish_time": "2027-01-15T19:00:00-05:00",
+          "target_channel": "TikTok",
+          "market": "US",
+          "timezone": "America/New_York",
+          "confirmation_status": "PENDING",
+          "review_status": "PASS",
+          "draft_status": "AWAITING_CONFIRMATION",
+          "risk_reasons": [],
+          "confirmation_evidence": [],
+          "created_at": "2026-11-01T14:27:35.981945Z",
+          "updated_at": "2026-11-01T14:27:35.981945Z",
+          "revision": 1
+        }
+      ],
+      "tool_path": [
+        "read_material",
+        "check_review_rules",
+        "query_schedule",
+        "query_schedule",
+        "save_schedule_draft"
+      ],
+      "previous_result": null,
+      "trace": {
+        "events": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_c1ed76dd39534e1f9d62fc5ddf29264e\\events.jsonl",
+        "trace": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_c1ed76dd39534e1f9d62fc5ddf29264e\\trace.json",
+        "result": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_c1ed76dd39534e1f9d62fc5ddf29264e\\result.json"
+      }
+    },
+    {
+      "case_id": "duplicate",
+      "passed": true,
+      "criterion": "Second independent process returns same committed draft",
+      "input": "examples\\duplicate.input.json",
+      "exit_code": 0,
+      "result": {
+        "run_id": "run_dba38799994b49da805bcd91802a2e03",
+        "case_id": "duplicate.input",
+        "execution_mode": "live",
+        "model_name": "deepseek-flash",
+        "execution_status": "COMPLETED",
+        "decision_steps": 5,
+        "tool_calls": 4,
+        "outcomes": [
+          {
+            "material_id": "M01",
+            "status": "DRAFT_SAVED",
+            "review": {
+              "material_id": "M01",
+              "review_status": "PASS",
+              "risk_level": "LOW",
+              "risk_reasons": [],
+              "matched_rules": [],
+              "missing_fields": [],
+              "requires_manual_review": false
+            },
+            "original_publish_time": "2027-01-15T16:00:00-05:00",
+            "suggested_publish_time": "2027-01-15T16:00:00-05:00",
+            "pending_items": [],
+            "schedule_blockers": [],
+            "schedule_check": {
+              "available": true,
+              "publish_time": "2027-01-15T16:00:00-05:00",
+              "conflicts": [],
+              "conflict_rule": "Same channel and market; start times less than 60 minutes apart conflict. READY drafts reserve; pending suggestions do not.",
+              "search_window": null,
+              "query_horizon_days": 7,
+              "minimum_spacing_minutes": 60,
+              "checked_at": "2026-11-01T14:28:06.437465+00:00",
+              "candidate_time_hints": [],
+              "hint": "Exact minimum-spacing boundaries are legal. Candidate hints have NOT been checked for availability: choose and query them yourself. No alternative is implicitly approved."
+            },
+            "save_status": "ALREADY_EXISTS",
+            "draft": {
+              "draft_id": "draft_80778fbf094d4317951ef81543e3e61a",
+              "request_fingerprint": "b550d253b6e20ffdfa797101e355c7cb87c3174e3dacc7defd6b449b2bbd4bbd",
+              "material_id": "M01",
+              "original_publish_time": "2027-01-15T16:00:00-05:00",
+              "suggested_publish_time": "2027-01-15T16:00:00-05:00",
+              "target_channel": "TikTok",
+              "market": "US",
+              "timezone": "America/New_York",
+              "confirmation_status": "ORIGINAL_REQUEST",
+              "review_status": "PASS",
+              "draft_status": "READY",
+              "risk_reasons": [],
+              "confirmation_evidence": [],
+              "created_at": "2026-11-01T14:27:49.668253Z",
+              "updated_at": "2026-11-01T14:27:49.668253Z",
+              "revision": 1
+            },
+            "verification_error": null
+          }
+        ],
+        "errors": [],
+        "token_usage_per_request": [
+          {
+            "prompt_tokens": 1775,
+            "completion_tokens": 73,
+            "total_tokens": 1848,
+            "prompt_tokens_details": {
+              "cached_tokens": 1536
+            },
+            "prompt_cache_hit_tokens": 1536,
+            "prompt_cache_miss_tokens": 239
+          },
+          {
+            "prompt_tokens": 2004,
+            "completion_tokens": 70,
+            "total_tokens": 2074,
+            "prompt_tokens_details": {
+              "cached_tokens": 1792
+            },
+            "prompt_cache_hit_tokens": 1792,
+            "prompt_cache_miss_tokens": 212
+          },
+          {
+            "prompt_tokens": 2135,
+            "completion_tokens": 101,
+            "total_tokens": 2236,
+            "prompt_tokens_details": {
+              "cached_tokens": 1920
+            },
+            "prompt_cache_hit_tokens": 1920,
+            "prompt_cache_miss_tokens": 215
+          },
+          {
+            "prompt_tokens": 2408,
+            "completion_tokens": 146,
+            "total_tokens": 2554,
+            "prompt_tokens_details": {
+              "cached_tokens": 2176
+            },
+            "prompt_cache_hit_tokens": 2176,
+            "prompt_cache_miss_tokens": 232
+          },
+          {
+            "prompt_tokens": 3023,
+            "completion_tokens": 243,
+            "total_tokens": 3266,
+            "prompt_tokens_details": {
+              "cached_tokens": 2432
+            },
+            "prompt_cache_hit_tokens": 2432,
+            "prompt_cache_miss_tokens": 591
+          }
+        ],
+        "publication_capability": false,
+        "fault_injection": false,
+        "finished_at": "2026-11-01T14:28:06.440076+00:00",
+        "trace_files": {
+          "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_dba38799994b49da805bcd91802a2e03\\events.jsonl",
+          "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_dba38799994b49da805bcd91802a2e03\\trace.json",
+          "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_dba38799994b49da805bcd91802a2e03\\result.json"
+        }
+      },
+      "database_snapshot": [
+        {
+          "draft_id": "draft_80778fbf094d4317951ef81543e3e61a",
+          "request_fingerprint": "b550d253b6e20ffdfa797101e355c7cb87c3174e3dacc7defd6b449b2bbd4bbd",
+          "material_id": "M01",
+          "original_publish_time": "2027-01-15T16:00:00-05:00",
+          "suggested_publish_time": "2027-01-15T16:00:00-05:00",
+          "target_channel": "TikTok",
+          "market": "US",
+          "timezone": "America/New_York",
+          "confirmation_status": "ORIGINAL_REQUEST",
+          "review_status": "PASS",
+          "draft_status": "READY",
+          "risk_reasons": [],
+          "confirmation_evidence": [],
+          "created_at": "2026-11-01T14:27:49.668253Z",
+          "updated_at": "2026-11-01T14:27:49.668253Z",
+          "revision": 1
+        }
+      ],
+      "tool_path": [
+        "read_material",
+        "check_review_rules",
+        "query_schedule",
+        "save_schedule_draft"
+      ],
+      "previous_result": {
+        "run_id": "run_4002caa037f74cbd815e406b8dfa40a9",
+        "case_id": "duplicate.input",
+        "execution_mode": "live",
+        "model_name": "deepseek-flash",
+        "execution_status": "COMPLETED",
+        "decision_steps": 5,
+        "tool_calls": 4,
+        "outcomes": [
+          {
+            "material_id": "M01",
+            "status": "DRAFT_SAVED",
+            "review": {
+              "material_id": "M01",
+              "review_status": "PASS",
+              "risk_level": "LOW",
+              "risk_reasons": [],
+              "matched_rules": [],
+              "missing_fields": [],
+              "requires_manual_review": false
+            },
+            "original_publish_time": "2027-01-15T16:00:00-05:00",
+            "suggested_publish_time": "2027-01-15T16:00:00-05:00",
+            "pending_items": [],
+            "schedule_blockers": [],
+            "schedule_check": {
+              "available": true,
+              "publish_time": "2027-01-15T16:00:00-05:00",
+              "conflicts": [],
+              "conflict_rule": "Same channel and market; start times less than 60 minutes apart conflict. READY drafts reserve; pending suggestions do not.",
+              "search_window": null,
+              "query_horizon_days": 7,
+              "minimum_spacing_minutes": 60,
+              "checked_at": "2026-11-01T14:27:52.557216+00:00",
+              "candidate_time_hints": [],
+              "hint": "Exact minimum-spacing boundaries are legal. Candidate hints have NOT been checked for availability: choose and query them yourself. No alternative is implicitly approved."
+            },
+            "save_status": "SAVED",
+            "draft": {
+              "draft_id": "draft_80778fbf094d4317951ef81543e3e61a",
+              "request_fingerprint": "b550d253b6e20ffdfa797101e355c7cb87c3174e3dacc7defd6b449b2bbd4bbd",
+              "material_id": "M01",
+              "original_publish_time": "2027-01-15T16:00:00-05:00",
+              "suggested_publish_time": "2027-01-15T16:00:00-05:00",
+              "target_channel": "TikTok",
+              "market": "US",
+              "timezone": "America/New_York",
+              "confirmation_status": "ORIGINAL_REQUEST",
+              "review_status": "PASS",
+              "draft_status": "READY",
+              "risk_reasons": [],
+              "confirmation_evidence": [],
+              "created_at": "2026-11-01T14:27:49.668253Z",
+              "updated_at": "2026-11-01T14:27:49.668253Z",
+              "revision": 1
+            },
+            "verification_error": null
+          }
+        ],
+        "errors": [],
+        "token_usage_per_request": [
+          {
+            "prompt_tokens": 1775,
+            "completion_tokens": 76,
+            "total_tokens": 1851,
+            "prompt_tokens_details": {
+              "cached_tokens": 1536
+            },
+            "prompt_cache_hit_tokens": 1536,
+            "prompt_cache_miss_tokens": 239
+          },
+          {
+            "prompt_tokens": 2007,
+            "completion_tokens": 70,
+            "total_tokens": 2077,
+            "prompt_tokens_details": {
+              "cached_tokens": 1792
+            },
+            "prompt_cache_hit_tokens": 1792,
+            "prompt_cache_miss_tokens": 215
+          },
+          {
+            "prompt_tokens": 2138,
+            "completion_tokens": 112,
+            "total_tokens": 2250,
+            "prompt_tokens_details": {
+              "cached_tokens": 1920
+            },
+            "prompt_cache_hit_tokens": 1920,
+            "prompt_cache_miss_tokens": 218
+          },
+          {
+            "prompt_tokens": 2422,
+            "completion_tokens": 146,
+            "total_tokens": 2568,
+            "prompt_tokens_details": {
+              "cached_tokens": 2176
+            },
+            "prompt_cache_hit_tokens": 2176,
+            "prompt_cache_miss_tokens": 246
+          },
+          {
+            "prompt_tokens": 3041,
+            "completion_tokens": 202,
+            "total_tokens": 3243,
+            "prompt_tokens_details": {
+              "cached_tokens": 2560
+            },
+            "prompt_cache_hit_tokens": 2560,
+            "prompt_cache_miss_tokens": 481
+          }
+        ],
+        "publication_capability": false,
+        "fault_injection": false,
+        "finished_at": "2026-11-01T14:27:52.558503+00:00",
+        "trace_files": {
+          "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_4002caa037f74cbd815e406b8dfa40a9\\events.jsonl",
+          "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_4002caa037f74cbd815e406b8dfa40a9\\trace.json",
+          "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_4002caa037f74cbd815e406b8dfa40a9\\result.json"
+        }
+      },
+      "trace": {
+        "events": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_dba38799994b49da805bcd91802a2e03\\events.jsonl",
+        "trace": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_dba38799994b49da805bcd91802a2e03\\trace.json",
+        "result": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_dba38799994b49da805bcd91802a2e03\\result.json"
+      }
+    },
+    {
+      "case_id": "save_failure",
+      "passed": true,
+      "criterion": "Injected failure rolled back; no persisted draft",
+      "input": "examples\\save_failure.input.json",
+      "exit_code": 4,
+      "result": {
+        "run_id": "run_8d593ff81d2b4bc289f2d331da75e1af",
+        "case_id": "save_failure.input",
+        "execution_mode": "live",
+        "model_name": "deepseek-flash",
+        "execution_status": "COMPLETED",
+        "decision_steps": 6,
+        "tool_calls": 5,
+        "outcomes": [
+          {
+            "material_id": "M01",
+            "status": "SAVE_FAILED",
+            "review": {
+              "material_id": "M01",
+              "review_status": "PASS",
+              "risk_level": "LOW",
+              "risk_reasons": [],
+              "matched_rules": [],
+              "missing_fields": [],
+              "requires_manual_review": false
+            },
+            "original_publish_time": "2027-01-15T16:00:00-05:00",
+            "suggested_publish_time": null,
+            "pending_items": [],
+            "schedule_blockers": [],
+            "schedule_check": null,
+            "save_status": "SAVE_FAILED",
+            "draft": null,
+            "verification_error": null
+          }
+        ],
+        "errors": [
+          {
+            "code": "SAVE_FAILED",
+            "tool_name": "save_schedule_draft",
+            "message": "OperationalError"
+          },
+          {
+            "code": "SAVE_FAILED",
+            "tool_name": "save_schedule_draft",
+            "message": "OperationalError"
+          }
+        ],
+        "token_usage_per_request": [
+          {
+            "prompt_tokens": 1776,
+            "completion_tokens": 75,
+            "total_tokens": 1851,
+            "prompt_tokens_details": {
+              "cached_tokens": 1536
+            },
+            "prompt_cache_hit_tokens": 1536,
+            "prompt_cache_miss_tokens": 240
+          },
+          {
+            "prompt_tokens": 2007,
+            "completion_tokens": 70,
+            "total_tokens": 2077,
+            "prompt_tokens_details": {
+              "cached_tokens": 1792
+            },
+            "prompt_cache_hit_tokens": 1792,
+            "prompt_cache_miss_tokens": 215
+          },
+          {
+            "prompt_tokens": 2138,
+            "completion_tokens": 104,
+            "total_tokens": 2242,
+            "prompt_tokens_details": {
+              "cached_tokens": 1920
+            },
+            "prompt_cache_hit_tokens": 1920,
+            "prompt_cache_miss_tokens": 218
+          },
+          {
+            "prompt_tokens": 2414,
+            "completion_tokens": 148,
+            "total_tokens": 2562,
+            "prompt_tokens_details": {
+              "cached_tokens": 2176
+            },
+            "prompt_cache_hit_tokens": 2176,
+            "prompt_cache_miss_tokens": 238
+          },
+          {
+            "prompt_tokens": 2611,
+            "completion_tokens": 133,
+            "total_tokens": 2744,
+            "prompt_tokens_details": {
+              "cached_tokens": 2432
+            },
+            "prompt_cache_hit_tokens": 2432,
+            "prompt_cache_miss_tokens": 179
+          },
+          {
+            "prompt_tokens": 2793,
+            "completion_tokens": 299,
+            "total_tokens": 3092,
+            "prompt_tokens_details": {
+              "cached_tokens": 2560
+            },
+            "prompt_cache_hit_tokens": 2560,
+            "prompt_cache_miss_tokens": 233
+          }
+        ],
+        "publication_capability": false,
+        "fault_injection": true,
+        "finished_at": "2026-11-01T14:28:25.026895+00:00",
+        "trace_files": {
+          "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_8d593ff81d2b4bc289f2d331da75e1af\\events.jsonl",
+          "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_8d593ff81d2b4bc289f2d331da75e1af\\trace.json",
+          "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_8d593ff81d2b4bc289f2d331da75e1af\\result.json"
+        }
+      },
+      "database_snapshot": [],
+      "tool_path": [
+        "read_material",
+        "check_review_rules",
+        "query_schedule",
+        "save_schedule_draft",
+        "save_schedule_draft"
+      ],
+      "previous_result": null,
+      "trace": {
+        "events": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_8d593ff81d2b4bc289f2d331da75e1af\\events.jsonl",
+        "trace": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_8d593ff81d2b4bc289f2d331da75e1af\\trace.json",
+        "result": "examples\\evidence\\live_20261101T142648Z_b223f7aa\\run_8d593ff81d2b4bc289f2d331da75e1af\\result.json"
+      }
+    }
+  ],
+  "passed": 6,
+  "total": 6
+}

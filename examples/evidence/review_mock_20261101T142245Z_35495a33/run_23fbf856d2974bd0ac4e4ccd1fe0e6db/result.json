@@ -1,0 +1,22 @@
+{
+  "run_id": "run_23fbf856d2974bd0ac4e4ccd1fe0e6db",
+  "execution_mode": "maintenance",
+  "execution_status": "COMPLETED",
+  "decision_steps": 0,
+  "tool_calls": 0,
+  "schedule_sync": {
+    "status": "SYNCHRONIZED",
+    "records": 1,
+    "inserted": 1,
+    "updated": 0,
+    "unchanged": 0,
+    "omitted_ids": "retained; cancel explicitly with status=CANCELLED"
+  },
+  "outcomes": [],
+  "errors": [],
+  "trace_files": {
+    "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\review_mock_20261101T142245Z_35495a33\\run_23fbf856d2974bd0ac4e4ccd1fe0e6db\\events.jsonl",
+    "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\review_mock_20261101T142245Z_35495a33\\run_23fbf856d2974bd0ac4e4ccd1fe0e6db\\trace.json",
+    "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\review_mock_20261101T142245Z_35495a33\\run_23fbf856d2974bd0ac4e4ccd1fe0e6db\\result.json"
+  }
+}

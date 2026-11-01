@@ -1,0 +1,103 @@
+{
+  "run_id": "run_141e27c9573849bb8ca60256bea781c4",
+  "case_id": "no_window.input",
+  "execution_mode": "live",
+  "model_name": "deepseek-flash",
+  "execution_status": "COMPLETED",
+  "decision_steps": 4,
+  "tool_calls": 3,
+  "outcomes": [
+    {
+      "material_id": "M01",
+      "status": "NEEDS_CONFIRMATION",
+      "review": {
+        "material_id": "M01",
+        "review_status": "PASS",
+        "risk_level": "LOW",
+        "risk_reasons": [],
+        "matched_rules": [],
+        "missing_fields": [],
+        "requires_manual_review": false
+      },
+      "original_publish_time": "2027-01-15T18:00:00-05:00",
+      "suggested_publish_time": null,
+      "pending_items": [
+        "Requested publish time is occupied. Provide a flexible_time_window or explicit user_confirmations for an available alternative; the hard requirement remains unchanged."
+      ],
+      "schedule_blockers": [
+        {
+          "code": "REQUESTED_SLOT_UNAVAILABLE",
+          "publish_time": "2027-01-15T18:00:00-05:00",
+          "conflicts": [
+            {
+              "source": "formal",
+              "id": "SYN-US-1800",
+              "publish_time": "2027-01-15T23:00:00+00:00"
+            }
+          ],
+          "requires_user_input": true,
+          "requested_fields": [
+            "flexible_time_window",
+            "user_confirmations"
+          ],
+          "message": "Requested publish time is occupied. Provide a flexible_time_window or explicit user_confirmations for an available alternative; the hard requirement remains unchanged."
+        }
+      ],
+      "schedule_check": null,
+      "save_status": "NOT_ATTEMPTED",
+      "draft": null,
+      "verification_error": null
+    }
+  ],
+  "errors": [],
+  "token_usage_per_request": [
+    {
+      "prompt_tokens": 1777,
+      "completion_tokens": 78,
+      "total_tokens": 1855,
+      "prompt_tokens_details": {
+        "cached_tokens": 1536
+      },
+      "prompt_cache_hit_tokens": 1536,
+      "prompt_cache_miss_tokens": 241
+    },
+    {
+      "prompt_tokens": 2011,
+      "completion_tokens": 66,
+      "total_tokens": 2077,
+      "prompt_tokens_details": {
+        "cached_tokens": 1792
+      },
+      "prompt_cache_hit_tokens": 1792,
+      "prompt_cache_miss_tokens": 219
+    },
+    {
+      "prompt_tokens": 2138,
+      "completion_tokens": 97,
+      "total_tokens": 2235,
+      "prompt_tokens_details": {
+        "cached_tokens": 1920
+      },
+      "prompt_cache_hit_tokens": 1920,
+      "prompt_cache_miss_tokens": 218
+    },
+    {
+      "prompt_tokens": 2448,
+      "completion_tokens": 415,
+      "total_tokens": 2863,
+      "prompt_tokens_details": {
+        "cached_tokens": 2176
+      },
+      "prompt_cache_hit_tokens": 2176,
+      "prompt_cache_miss_tokens": 272
+    }
+  ],
+  "publication_capability": false,
+  "fault_injection": false,
+  "finished_at": "2026-11-01T14:27:39.931163+00:00",
+  "trace_files": {
+    "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\review_live_20261101T142650Z_624f8ade\\run_141e27c9573849bb8ca60256bea781c4\\events.jsonl",
+    "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\review_live_20261101T142650Z_624f8ade\\run_141e27c9573849bb8ca60256bea781c4\\trace.json",
+    "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\review_live_20261101T142650Z_624f8ade\\run_141e27c9573849bb8ca60256bea781c4\\result.json"
+  }
+}
