@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from typing import Literal
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, field_validator, model_validator
 
 
 def aware(value: datetime) -> datetime:
@@ -23,7 +23,21 @@ class Record(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class ReviewMetadata(BaseModel):
+    model_config = ConfigDict(extra="allow", validate_assignment=True)
+    has_promotional_claim: StrictBool = False
+    claims_verified: StrictBool | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def identify_claim(cls, value):
+        if isinstance(value, dict) and "claims_verified" in value and "has_promotional_claim" not in value:
+            return {**value, "has_promotional_claim": True}
+        return value
+
+
 class Material(Record):
+    model_config = ConfigDict(extra="forbid", validate_assignment=True)
     material_id: str
     title: str | None = None
     material_type: str | None = None
@@ -35,7 +49,7 @@ class Material(Record):
     copyright_status: Literal["AUTHORIZED", "UNKNOWN", "PROHIBITED"] | None = None
     authorization_scope: list[str] = Field(default_factory=list)
     content_tags: list[str] = Field(default_factory=list)
-    review_metadata: dict = Field(default_factory=dict)
+    review_metadata: ReviewMetadata = Field(default_factory=ReviewMetadata)
     missing_fields: list[str] = Field(default_factory=list)
 
     @field_validator("material_id", "title", "material_type", "content_theme", "target_product", "target_market", "language", "target_channel")
@@ -159,5 +173,16 @@ class ScheduleDraft(Record):
     confirmation_evidence: list[UserConfirmation]
     created_at: datetime
     updated_at: datetime
+    revision: int = Field(default=1, ge=1)
 
     _aware = field_validator("original_publish_time", "suggested_publish_time", "created_at", "updated_at")(aware)
+
+
+class FormalSchedule(Record):
+    schedule_id: str = Field(min_length=1)
+    target_channel: Literal["TikTok", "Instagram Reels", "YouTube Shorts", "InApp"]
+    market: str = Field(min_length=2, max_length=10)
+    publish_time: datetime
+    status: Literal["CONFIRMED", "CANCELLED"]
+
+    _aware = field_validator("publish_time")(aware)

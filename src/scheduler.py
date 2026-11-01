@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import sqlite3
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 
 from .models import ScheduleRequest, aware
 
@@ -24,9 +25,24 @@ class ScheduleService:
             if abs((datetime.fromisoformat(row["publish_time"]) - publish_time).total_seconds()) < self.window_minutes * 60:
                 conflicts.append({"source": "draft", "id": row["draft_id"], "publish_time": row["publish_time"]})
         window = request.flexible_time_window
+        candidates = set()
+        if conflicts and window:
+            candidates.update((window.start, window.end))
+            for conflict in conflicts:
+                occupied = datetime.fromisoformat(conflict["publish_time"])
+                candidates.update((occupied - timedelta(minutes=self.window_minutes), occupied + timedelta(minutes=self.window_minutes)))
+        confirmed = {c.target_time for c in request.user_confirmations if c.material_id == material_id}
+        candidates.update(confirmed)
+        hints = [{"publish_time": candidate.astimezone(ZoneInfo(request.timezone)).isoformat(),
+                  "availability": "UNVERIFIED", "basis": "User-window endpoint, observed conflict spacing boundary, or explicit confirmation"}
+                 for candidate in sorted(candidates)
+                 if candidate != publish_time and candidate > datetime.now(timezone.utc)
+                 and abs((candidate - request.requested_publish_time).total_seconds()) <= 7 * 86400
+                 and ((window and window.start <= candidate <= window.end) or candidate in confirmed)]
         return {"available": not conflicts, "publish_time": publish_time.isoformat(), "conflicts": conflicts,
                 "conflict_rule": f"Same channel and market; start times less than {self.window_minutes} minutes apart conflict. READY drafts reserve; pending suggestions do not.",
                 "search_window": window.model_dump(mode="json") if window else None,
                 "query_horizon_days": 7, "minimum_spacing_minutes": self.window_minutes,
                 "checked_at": datetime.now(timezone.utc).isoformat(),
-                "hint": "Choose and query another time if needed; no alternative is implicitly approved."}
+                "candidate_time_hints": hints,
+                "hint": "Exact minimum-spacing boundaries are legal. Candidate hints have NOT been checked for availability: choose and query them yourself. No alternative is implicitly approved."}

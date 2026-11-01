@@ -23,6 +23,8 @@ flowchart TD
 
 运行时没有“发现 18 点冲突则自动改 19 点”的决策分支，没有模型调用重试。即使提供方返回多工具批次，工具按顺序执行且逐项计算预算。模型可以自主重新查询和重试保存。SQLite 的锁等待属于事务协调，不属于替模型规划。
 
+时段查询会根据本次实际冲突的开始时间、配置的最小间距和用户窗口端点，计算 `candidate_time_hints`。所有提示明确标为 UNVERIFIED，不代表空闲或批准。模型仍须自行选择、查询并观察后才能保存；候选不是硬编码时间，也不会自动触发下一次查询。这用于避免模型只尝试五分钟偏移而漏掉恰好满足最小间距的边界。
+
 `reason_summary` 是动作的简短公开目的，不请求私有推理链。适配器不读取或保留 `reasoning_content` 等隐藏推理字段。实际 DeepSeek 运行显式使用 `thinking.type=disabled`，通过 `LLM_EXTRA_BODY` 配置；额外配置禁止覆盖消息、模型和工具等关键字段。
 
 协议参考实际打开的 [OpenAI Function Calling](https://developers.openai.com/api/docs/guides/function-calling)、[DeepSeek Tool Calls](https://api-docs.deepseek.com/guides/tool_calls/) 和 [DeepSeek Chat Completions](https://api-docs.deepseek.com/api/create-chat-completion/)。本项目适配 Chat Completions；仅支持其他接口的模型不能直接替换使用。
@@ -41,6 +43,8 @@ flowchart TD
 
 许可明确禁止或超出渠道市场范围 BLOCKED；许可未知和必填字段缺失 NEEDS_INFO；语言不符、未核实宣传声明与人工风险标签 NEEDS_REVIEW。规则优先级是 BLOCKED > NEEDS_INFO > NEEDS_REVIEW > PASS。
 
+`ReviewMetadata` 对 has_promotional_claim 与 claims_verified 使用 StrictBool。非法字符串、整数等不能静默转换为审核通过。提供核实字段意味着存在宣传声明；null 表示未核实，必须人工复核。没有声明的元数据通过显式 has_promotional_claim=false 或省略声明字段表示。source、license_note 等扩展信息仍可保留。补查或重复读取只有在素材实际变化时才使旧审核失效，避免无变化补查清空已知审核结果。
+
 ## 时间与确认
 
 模型只能在用户窗口内提出未确认替代；硬性时间的替代必须 PENDING，软偏好窗口内可 WITHIN_FLEXIBILITY。精确 `user_confirmations` 输入允许 USER_CONFIRMED 并持久化 material_id、target_time、confirmed_at、source。确认时间不能在未来或晚于目标时间。它是本地 CLI 的可信用户输入边界，没有实现身份认证或签名审批。
@@ -51,9 +55,19 @@ flowchart TD
 
 原始 Pydantic 请求规范化为键排序 JSON，时间转换为 UTC，素材及确认列表排序，计算 SHA-256。request_id 也参与指纹：调用方必须复用同一个 ID 重试；新的 ID 表示独立需求，不被错误合并。数据库唯一键 `(request_fingerprint, material_id)` 支持多素材独立保存。
 
-保存顺序是 `BEGIN IMMEDIATE → 查同指纹已有记录 → 当前时段二次查询 → Guard → INSERT → COMMIT`。已有记录返回原 ID 与原内容，不修改草稿，也不表示本次新建议已被接受。锁覆盖二次检查与插入，避免两个进程同时占用同一时段。唯一约束提供幂等最终保证。SQLite WAL 与 10 秒 busy timeout 适合此单机最小实现。
+保存先执行 BEGIN IMMEDIATE 并查找同指纹记录。新草稿经过当前时段二次查询、Guard、INSERT 和 COMMIT；已有草稿按下述规则复查与复用或重排。锁覆盖校验与写入，避免两个进程同时占用同一时段。唯一约束提供幂等最终保证。SQLite WAL 与 10 秒 busy timeout 适合此单机最小实现。
+
+修复后的幂等分支同样在事务内查询已有草稿的实际时间并执行 Guard。仍有效时 ALREADY_EXISTS，维持原内容；失效的 AWAITING_CONFIRMATION 建议可在模型查询新的合法目标后，UPDATE 同一行，返回 SAVED / action=REPLANNED。原 ID、原要求和 created_at 保留，revision 增加，旧内容写入 draft_revisions。已批准草稿失效时返回 REJECTED_BY_POLICY / EXISTING_DRAFT_INVALID，由用户明确处理，不静默修改其批准含义。新目标仍校验查询证据、时间窗口及确认状态。事务失败回滚更新和历史插入。
+
+最终结果生成时还会读取当前记录并查询该时间，输出 schedule_check。若提交后状态已变化，则明确给出 NEEDS_CONFIRMATION、冲突及待办，不继续把失效时间放入 suggested_publish_time。校验结果是 checked_at 时刻的快照，不承诺未来永远不变。
 
 `--simulate-save-failure` 在真实 INSERT 后、COMMIT 前抛出 SQLite 异常并回滚；这是明确的故障注入，不伪造持久化结果。最终输出还会再次读取已提交记录验证 ID；访问失败返回 INCOMPLETE 和验证错误，不能宣称已验证保存成功。
+
+故障注入也覆盖重排 UPDATE 与旧版本插入之后、COMMIT 之前，测试验证二者一起回滚。无成功保存的冲突场景由实际查询观察生成 schedule_blockers；没有调整窗口或精确确认时，返回 NEEDS_CONFIRMATION，并说明需要 flexible_time_window 或 user_confirmations。不会通过解析或信任模型自由文本来生成批准状态。
+
+## 正式排期数据同步
+
+默认 JSON 是一次性初始化种子，INSERT OR IGNORE 防止每次进程启动覆盖数据库当前状态。更换源文件后必须显式运行 `python -m src.main --sync-schedules path/to/schedules.json --db runs/drafts.db`。该维护模式不调用模型，execution_mode=maintenance；按 schedule_id 原子 UPSERT 时间、渠道、市场和状态，整批校验带时区时间、状态和重复 ID 后才写入。省略的 ID 不删除，取消需显式提交 CANCELLED。同步后 Agent 使用同一数据库查询最新结果。同步是用户显式的输入维护操作，不属于模型行动规划。
 
 ## 执行预算与观测
 

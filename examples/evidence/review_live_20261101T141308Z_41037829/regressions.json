@@ -1,0 +1,132 @@
+{
+  "execution_mode": "live",
+  "started_at": "2026-11-01T14:13:08.560899+00:00",
+  "finished_at": "2026-11-01T14:13:42.142664+00:00",
+  "cases": [
+    {
+      "case_id": "changed_slot_repeat",
+      "passed": false,
+      "error_type": "ValueError"
+    },
+    {
+      "case_id": "no_window_confirmation",
+      "passed": true,
+      "input": "examples/evidence/review_live_20261101T141308Z_41037829/no_window.input.json",
+      "execution": {
+        "exit_code": 0,
+        "result": {
+          "run_id": "run_5e0735d4d95c4175a1ee1477e42a498c",
+          "case_id": "no_window.input",
+          "execution_mode": "live",
+          "model_name": "deepseek-flash",
+          "execution_status": "COMPLETED",
+          "decision_steps": 4,
+          "tool_calls": 3,
+          "outcomes": [
+            {
+              "material_id": "M01",
+              "status": "NEEDS_CONFIRMATION",
+              "review": {
+                "material_id": "M01",
+                "review_status": "PASS",
+                "risk_level": "LOW",
+                "risk_reasons": [],
+                "matched_rules": [],
+                "missing_fields": [],
+                "requires_manual_review": false
+              },
+              "original_publish_time": "2027-01-15T18:00:00-05:00",
+              "suggested_publish_time": null,
+              "pending_items": [
+                "Requested publish time is occupied. Provide a flexible_time_window or explicit user_confirmations for an available alternative; the hard requirement remains unchanged."
+              ],
+              "schedule_blockers": [
+                {
+                  "code": "REQUESTED_SLOT_UNAVAILABLE",
+                  "publish_time": "2027-01-15T18:00:00-05:00",
+                  "conflicts": [
+                    {
+                      "source": "formal",
+                      "id": "SYN-US-1800",
+                      "publish_time": "2027-01-15T23:00:00+00:00"
+                    }
+                  ],
+                  "requires_user_input": true,
+                  "requested_fields": [
+                    "flexible_time_window",
+                    "user_confirmations"
+                  ],
+                  "message": "Requested publish time is occupied. Provide a flexible_time_window or explicit user_confirmations for an available alternative; the hard requirement remains unchanged."
+                }
+              ],
+              "schedule_check": null,
+              "save_status": "NOT_ATTEMPTED",
+              "draft": null,
+              "verification_error": null
+            }
+          ],
+          "errors": [],
+          "token_usage_per_request": [
+            {
+              "prompt_tokens": 1699,
+              "completion_tokens": 78,
+              "total_tokens": 1777,
+              "prompt_tokens_details": {
+                "cached_tokens": 1408
+              },
+              "prompt_cache_hit_tokens": 1408,
+              "prompt_cache_miss_tokens": 291
+            },
+            {
+              "prompt_tokens": 1933,
+              "completion_tokens": 70,
+              "total_tokens": 2003,
+              "prompt_tokens_details": {
+                "cached_tokens": 1664
+              },
+              "prompt_cache_hit_tokens": 1664,
+              "prompt_cache_miss_tokens": 269
+            },
+            {
+              "prompt_tokens": 2064,
+              "completion_tokens": 120,
+              "total_tokens": 2184,
+              "prompt_tokens_details": {
+                "cached_tokens": 1920
+              },
+              "prompt_cache_hit_tokens": 1920,
+              "prompt_cache_miss_tokens": 144
+            },
+            {
+              "prompt_tokens": 2373,
+              "completion_tokens": 420,
+              "total_tokens": 2793,
+              "prompt_tokens_details": {
+                "cached_tokens": 2176
+              },
+              "prompt_cache_hit_tokens": 2176,
+              "prompt_cache_miss_tokens": 197
+            }
+          ],
+          "publication_capability": false,
+          "fault_injection": false,
+          "finished_at": "2026-11-01T14:13:42.025650+00:00",
+          "trace_files": {
+            "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\review_live_20261101T141308Z_41037829\\run_5e0735d4d95c4175a1ee1477e42a498c\\events.jsonl",
+            "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\review_live_20261101T141308Z_41037829\\run_5e0735d4d95c4175a1ee1477e42a498c\\trace.json",
+            "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\review_live_20261101T141308Z_41037829\\run_5e0735d4d95c4175a1ee1477e42a498c\\result.json"
+          }
+        }
+      },
+      "traces": [
+        {
+          "events": "examples/evidence/review_live_20261101T141308Z_41037829/run_5e0735d4d95c4175a1ee1477e42a498c/events.jsonl",
+          "trace": "examples/evidence/review_live_20261101T141308Z_41037829/run_5e0735d4d95c4175a1ee1477e42a498c/trace.json",
+          "result": "examples/evidence/review_live_20261101T141308Z_41037829/run_5e0735d4d95c4175a1ee1477e42a498c/result.json"
+        }
+      ]
+    }
+  ],
+  "passed": 1,
+  "total": 2
+}

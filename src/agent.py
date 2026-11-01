@@ -16,12 +16,18 @@ If reliable info remains missing, stop that material and request those specific 
 BLOCKED/NEEDS_REVIEW must stop executable scheduling. Do not try to override rules.
 When a slot conflicts, choose another time inside the user's flexible window and query it;
 do not repeatedly query occupied times. If no authorized search window exists, ask the user.
+The spacing rule is strict: exact minimum-spacing boundaries are legal. Use candidate_time_hints
+or window endpoints to avoid overlooking such boundaries; every hint is UNVERIFIED and must be queried.
 For hard-time alternatives, save only PENDING unless original input contains matching explicit confirmation.
 Use ORIGINAL_REQUEST for unchanged requested time, WITHIN_FLEXIBILITY for a soft alternative,
 and USER_CONFIRMED only for an exact explicit confirmation in original input.
 Always keep the original requested time intact. A pending suggestion is not approved.
 SAVE_FAILED means nothing was saved; report failure or explicitly choose a justified retry.
 ALREADY_EXISTS returns the actual existing draft, do not invent another ID.
+An invalid pending suggestion can be replanned by querying a legal alternative and saving again;
+the repository preserves its draft_id and records a revision. Never silently reapprove an invalid READY draft.
+Only lookup supplementary metadata when review information is missing; scheduling conflicts do not need a license lookup.
+If no authorized alternative can be chosen, ask for the missing window or explicit confirmation and stop.
 You can stop when each material has an actual saved draft, missing info, review block, or save failure.
 Each tool needs a short reason_summary stating the public purpose of that action. Do not supply hidden reasoning.
 At the end provide a brief factual summary. The runtime independently derives authoritative outcomes from tools and SQLite.
@@ -71,8 +77,7 @@ class AgentRuntime:
                 self.trace.event("model_final", step_index=step, selected_action="finish", execution_status="MODEL_FINISHED",
                                  model_public_content=(assistant.get("content") or "")[:1200],
                                  decision_reason_summary="Model ended tool selection; business outcome is derived independently")
-                outcomes = self.tools.outcomes()
-                status = "INCOMPLETE" if any(o["status"] == "INCOMPLETE" for o in outcomes) else "COMPLETED"
+                status = "COMPLETED"
                 break
             exhausted = False
             for call in selected:
@@ -104,10 +109,13 @@ class AgentRuntime:
         else:
             errors.append({"code": "STEP_BUDGET_EXHAUSTED", "message": "Model did not finish within the decision budget"})
             self.trace.event("budget_exhausted", step_index=steps_used, selected_action="step_budget", execution_status="INCOMPLETE", error_summary=errors[-1])
+        outcomes = self.tools.outcomes()
+        if status == "COMPLETED" and any(o["status"] == "INCOMPLETE" for o in outcomes):
+            status = "INCOMPLETE"
         return self.trace.finish({"run_id": self.trace.run_id, "case_id": self.trace.case_id,
                                   "execution_mode": self.model.execution_mode, "model_name": self.model.model_name,
                                   "execution_status": status, "decision_steps": steps_used, "tool_calls": calls_used,
-                                  "outcomes": self.tools.outcomes(), "errors": errors,
+                                  "outcomes": outcomes, "errors": errors,
                                   "token_usage_per_request": usages, "publication_capability": False,
                                   "fault_injection": self.tools.simulate_save_failure,
                                   "finished_at": datetime.now(timezone.utc).isoformat()})

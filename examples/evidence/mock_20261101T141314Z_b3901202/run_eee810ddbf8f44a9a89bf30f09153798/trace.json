@@ -1,0 +1,57 @@
+[
+  {
+    "run_id": "run_eee810ddbf8f44a9a89bf30f09153798",
+    "case_id": "risk.input",
+    "execution_mode": "mock",
+    "timestamp": "2026-11-01T14:13:18.187152+00:00",
+    "model_name": "offline-scripted-simulator",
+    "event_type": "tool_result",
+    "step_index": 1,
+    "selected_action": "read_material",
+    "tool_name": "read_material",
+    "tool_call_id": "mock_f7775523b6ef4b538460c152fe1566aa",
+    "tool_arguments": {
+      "material_id": "M03",
+      "reason_summary": "Offline scripted validation: read_material"
+    },
+    "tool_response_summary": "{\"status\": \"OK\", \"material\": {\"material_id\": \"M03\", \"title\": \"Unlicensed music creative\", \"material_type\": \"social_video\", \"content_theme\": \"music montage\", \"target_product\": \"VivaVideo\", \"target_market\": \"US\", \"language\": \"en\", \"target_channel\": \"TikTok\", \"copyright_status\": \"PROHIBITED\", \"authorization_scope\": [\"TikTok:US\"], \"content_tags\": [], \"review_metadata\": {\"has_promotional_claim\": false, \"claims_verified\": null, \"source\": \"synthetic_fixture\", \"license_note\": \"Explicitly denied in synthetic license register\"}, \"missing_fields\": []}}",
+    "next_action": "check_review_rules",
+    "decision_reason_summary": "Offline scripted validation: read_material",
+    "execution_status": "OK",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_eee810ddbf8f44a9a89bf30f09153798",
+    "case_id": "risk.input",
+    "execution_mode": "mock",
+    "timestamp": "2026-11-01T14:13:18.196272+00:00",
+    "model_name": "offline-scripted-simulator",
+    "event_type": "tool_result",
+    "step_index": 2,
+    "selected_action": "check_review_rules",
+    "tool_name": "check_review_rules",
+    "tool_call_id": "mock_44056bec2611481d856e63abee769185",
+    "tool_arguments": {
+      "material_id": "M03",
+      "reason_summary": "Offline scripted validation: check_review_rules"
+    },
+    "tool_response_summary": "{\"material_id\": \"M03\", \"review_status\": \"BLOCKED\", \"risk_level\": \"HIGH\", \"risk_reasons\": [\"Synthetic license register explicitly prohibits use\"], \"matched_rules\": [\"LICENSE_PROHIBITED\"], \"missing_fields\": [], \"requires_manual_review\": true}",
+    "next_action": "finish",
+    "decision_reason_summary": "Offline scripted validation: check_review_rules",
+    "execution_status": "BLOCKED",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_eee810ddbf8f44a9a89bf30f09153798",
+    "case_id": "risk.input",
+    "execution_mode": "mock",
+    "timestamp": "2026-11-01T14:13:18.209838+00:00",
+    "model_name": "offline-scripted-simulator",
+    "event_type": "model_final",
+    "step_index": 3,
+    "selected_action": "finish",
+    "execution_status": "MODEL_FINISHED",
+    "decision_reason_summary": "Model ended tool selection; business outcome is derived independently",
+    "next_action": "finish"
+  }
+]

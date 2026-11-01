@@ -1,0 +1,79 @@
+{
+  "run_id": "run_8bed9e26cf6047cd8c88c1a1810856a7",
+  "case_id": "risk.input",
+  "execution_mode": "live",
+  "model_name": "deepseek-flash",
+  "execution_status": "COMPLETED",
+  "decision_steps": 3,
+  "tool_calls": 2,
+  "outcomes": [
+    {
+      "material_id": "M03",
+      "status": "BLOCKED",
+      "review": {
+        "material_id": "M03",
+        "review_status": "BLOCKED",
+        "risk_level": "HIGH",
+        "risk_reasons": [
+          "Synthetic license register explicitly prohibits use"
+        ],
+        "matched_rules": [
+          "LICENSE_PROHIBITED"
+        ],
+        "missing_fields": [],
+        "requires_manual_review": true
+      },
+      "original_publish_time": "2027-01-15T16:00:00-05:00",
+      "suggested_publish_time": null,
+      "pending_items": [
+        "Synthetic license register explicitly prohibits use"
+      ],
+      "schedule_blockers": [],
+      "schedule_check": null,
+      "save_status": "NOT_ATTEMPTED",
+      "draft": null,
+      "verification_error": null
+    }
+  ],
+  "errors": [],
+  "token_usage_per_request": [
+    {
+      "prompt_tokens": 1737,
+      "completion_tokens": 72,
+      "total_tokens": 1809,
+      "prompt_tokens_details": {
+        "cached_tokens": 1408
+      },
+      "prompt_cache_hit_tokens": 1408,
+      "prompt_cache_miss_tokens": 329
+    },
+    {
+      "prompt_tokens": 1979,
+      "completion_tokens": 69,
+      "total_tokens": 2048,
+      "prompt_tokens_details": {
+        "cached_tokens": 1792
+      },
+      "prompt_cache_hit_tokens": 1792,
+      "prompt_cache_miss_tokens": 187
+    },
+    {
+      "prompt_tokens": 2124,
+      "completion_tokens": 262,
+      "total_tokens": 2386,
+      "prompt_tokens_details": {
+        "cached_tokens": 1920
+      },
+      "prompt_cache_hit_tokens": 1920,
+      "prompt_cache_miss_tokens": 204
+    }
+  ],
+  "publication_capability": false,
+  "fault_injection": false,
+  "finished_at": "2026-11-01T14:16:49.475757+00:00",
+  "trace_files": {
+    "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T141612Z_81be7847\\run_8bed9e26cf6047cd8c88c1a1810856a7\\events.jsonl",
+    "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T141612Z_81be7847\\run_8bed9e26cf6047cd8c88c1a1810856a7\\trace.json",
+    "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T141612Z_81be7847\\run_8bed9e26cf6047cd8c88c1a1810856a7\\result.json"
+  }
+}

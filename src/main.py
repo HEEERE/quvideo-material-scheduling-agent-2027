@@ -37,8 +37,9 @@ def main(argv: list[str] | None = None) -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description="Synthetic material review and draft scheduling. Never publishes.")
-    parser.add_argument("--mode", choices=["live", "mock"], required=True)
-    parser.add_argument("--input", type=Path, required=True)
+    parser.add_argument("--mode", choices=["live", "mock"])
+    parser.add_argument("--input", type=Path)
+    parser.add_argument("--sync-schedules", type=Path, help="Standalone explicit upsert of formal schedule times/statuses; no model call")
     parser.add_argument("--db", type=Path, default=ROOT / "runs" / "drafts.db")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "runs")
     parser.add_argument("--max-steps", type=int, default=16)
@@ -46,12 +47,26 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--timeout", type=float)
     parser.add_argument("--simulate-save-failure", action="store_true", help="Explicit fault injection: rollback the insert before commit")
     args = parser.parse_args(argv)
+    if args.sync_schedules:
+        if args.mode or args.input:
+            parser.error("--sync-schedules is a standalone operation; omit --mode and --input")
+    elif not args.mode or not args.input:
+        parser.error("--mode and --input are required unless --sync-schedules is used")
     load_dotenv(ROOT / ".env", override=False)
     try:
-        request = ScheduleRequest.model_validate_json(args.input.read_text(encoding="utf-8-sig"))
-        result = run_case(request, mode=args.mode, db_path=args.db, output_dir=args.output_dir,
-                          case_id=args.input.stem, max_steps=args.max_steps, max_tool_calls=args.max_tool_calls,
-                          timeout=args.timeout, simulate_save_failure=args.simulate_save_failure)
+        if args.sync_schedules:
+            repository = DraftRepository(args.db, schedules_path=None)
+            sync_result = repository.sync_schedules(args.sync_schedules)
+            trace = TraceRecorder(args.output_dir, "schedule_sync", "maintenance", "no-model")
+            trace.event("schedule_sync", step_index=0, selected_action="sync_schedules",
+                        execution_status=sync_result["status"], tool_response=sync_result)
+            result = trace.finish({"run_id": trace.run_id, "execution_mode": "maintenance", "execution_status": "COMPLETED",
+                                   "decision_steps": 0, "tool_calls": 0, "schedule_sync": sync_result, "outcomes": [], "errors": []})
+        else:
+            request = ScheduleRequest.model_validate_json(args.input.read_text(encoding="utf-8-sig"))
+            result = run_case(request, mode=args.mode, db_path=args.db, output_dir=args.output_dir,
+                              case_id=args.input.stem, max_steps=args.max_steps, max_tool_calls=args.max_tool_calls,
+                              timeout=args.timeout, simulate_save_failure=args.simulate_save_failure)
     except ModelError as exc:
         result = {"execution_mode": args.mode, "execution_status": "FAILED", "errors": [{"code": exc.code, "message": str(exc)}]}
     except ValidationError as exc:
@@ -63,11 +78,11 @@ def main(argv: list[str] | None = None) -> int:
     if "run_id" not in result:
         # Even preflight failure is an execution, and must leave inspectable evidence.
         try:
-            trace = TraceRecorder(args.output_dir, args.input.stem, args.mode,
-                                  __import__("os").getenv("LLM_MODEL", "unconfigured") if args.mode == "live" else MockModel.model_name)
+            trace = TraceRecorder(args.output_dir, args.input.stem if args.input else "schedule_sync", args.mode or "maintenance",
+                                  __import__("os").getenv("LLM_MODEL", "unconfigured") if args.mode == "live" else MockModel.model_name if args.mode == "mock" else "no-model")
             trace.event("runtime_error", step_index=0, selected_action="preflight_error",
                         execution_status="FAILED", error_summary=result["errors"])
-            result = trace.finish({**result, "run_id": trace.run_id, "execution_mode": args.mode,
+            result = trace.finish({**result, "run_id": trace.run_id, "execution_mode": args.mode or "maintenance",
                                    "decision_steps": 0, "tool_calls": 0, "outcomes": []})
         except OSError:
             result["trace_error"] = "Trace directory is not writable"

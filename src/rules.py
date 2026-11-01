@@ -55,7 +55,8 @@ class ReviewService:
             elif tag in self.rules["manual_review_tags"]:
                 manual = True
                 hit("MANUAL_CONTENT_REVIEW", f"Human review required for tag: {tag}")
-        if material.review_metadata.get("claims_verified") is False:
+        metadata = material.review_metadata
+        if metadata.claims_verified is False or (metadata.has_promotional_claim and metadata.claims_verified is not True):
             manual = True
             hit("CLAIM_UNVERIFIED", "Promotional claim lacks verification evidence")
         status = "BLOCKED" if blocked else "NEEDS_INFO" if missing else "NEEDS_REVIEW" if manual else "PASS"

@@ -22,3 +22,5 @@ gh run list --repo HEEERE/quvideo-material-scheduling-agent-2027
 虚拟环境、`.env`、SQLite 数据库和运行缓存保留在本机忽略目录。评估报告提供真实保存记录的数据库快照；评审可用 README 命令重新生成数据库并验证幂等行为。没有提交真实 API Key、真实公司数据或本机完整临时错误堆栈。
 
 AI 辅助和人工贡献范围见 [AI 使用记录](04-ai-usage.md)。项目当前限制见 [评估报告](03-evaluation.md)。未添加发布接口。
+
+审核修复交付新增 [修复说明](07-review-fixes.md) 与 [最新证据索引](latest-evidence.json)。交付核查同时检查真实/离线的六个基础场景和两个审核动态边界，并逐条检查最终运行的源文件哈希；初次开发的时间记录保持为历史记录，不累计为本次修复工时。

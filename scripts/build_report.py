@@ -23,9 +23,24 @@ def portable(value):
     return Path(value.replace("\\", "/")).as_posix()
 
 
+def latest_regressions(mode):
+    candidates = []
+    for path in (ROOT / "examples/evidence").glob("review_*/regressions.json"):
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if data["execution_mode"] == mode:
+            candidates.append((data["started_at"], path, data))
+    _, path, data = max(candidates)
+    return path, data
+
+
 def main():
     live_path, live = latest("live")
     mock_path, mock = latest("mock")
+    review_path, review = latest_regressions("live")
+    mock_review_path, mock_review = latest_regressions("mock")
+    review_link = review_path.relative_to(ROOT).as_posix()
+    mock_review_link = mock_review_path.relative_to(ROOT).as_posix()
+    test_session = json.loads((ROOT / "examples/test-session.json").read_text(encoding="utf-8"))
     test_text = (ROOT / "examples/test-results.txt").read_text(encoding="utf-8-sig")
     match = re.search(r"(\d+) passed in ([0-9.]+)s", test_text)
     if not match:
@@ -56,6 +71,8 @@ def main():
 | 确定性 pytest | {match[1]} 项通过，耗时 {match[2]} 秒 | [原始输出](../examples/test-results.txt) |
 | DeepSeek 真实模型 | {live['passed']}/{live['total']} 个场景通过本批次断言 | [完整报告](../{relative_live}) |
 | 离线脚本模拟 | {mock['passed']}/{mock['total']} 个场景通过 | [独立报告](../{relative_mock}) |
+| 审核发现的动态边界，真实模型 | {review['passed']}/{review['total']} 个场景通过 | [真实修复复验](../{review_link}) |
+| 审核发现的动态边界，离线 | {mock_review['passed']}/{mock_review['total']} 个场景通过 | [离线修复复验](../{mock_review_link}) |
 
 这些是有限案例的实际结果，不代表总体成功率。live 由原生模型工具调用产生；mock 和测试替身不能证明模型自主决策。
 
@@ -81,12 +98,14 @@ def main():
 
 保存异常测试在 INSERT 后注入真实 SQLite 异常，验证 rollback。真实模型有自主重试的记录，所有失败都返回 SAVE_FAILED，没有伪成功或额外行。
 
-实现检查后补充了空白元数据、预检错误记录、数据库成功复查失败和并发不同请求竞争时段的保护与测试。最终复核曾因切换沙箱身份无法访问既有临时目录而出现环境错误，实际记录见 [失败摘要](../examples/test-results-permission-error.txt)。换用新的项目内临时目录复测后，全部 {match[1]} 项通过；没有删除案例或放宽规则。
+审核后新增待确认建议失效重排、同 ID 历史版本、并发重排、重排回滚、声明字段严格类型、确认请求输出和显式排期同步等回归测试。新增 25 项检查在修复前是 23 failed / 2 passed，失败输出见 [修复前记录](../examples/review-regressions-before.txt)；修复后与原有测试共同达到 {match[1]} 项通过。真实复验分别检查“占用变化后同请求保留 ID 重排”和“无窗口硬性冲突输出待确认项”，详见 [修复说明](07-review-fixes.md)。
+
+初次开发复核曾因切换沙箱身份无法访问既有临时目录而出现环境错误，实际记录见 [失败摘要](../examples/test-results-permission-error.txt)。使用项目内独立临时目录后复测通过；没有删除案例或放宽规则。
 
 本机实际复测命令：
 
 ```powershell
-.\\.venv\\Scripts\\python -m pytest -q --basetemp runs/pytest-final-20261101-1340 -o cache_dir=runs/pytest-cache-final
+{test_session['command']}
 ```
 
 一般环境直接使用 `python -m pytest -q`。GitHub Actions 已提供 Python 3.11/3.12、Ubuntu/Windows 的测试矩阵配置，远程工作流结果需以 GitHub 实际状态为准，本报告不声称未查看的工作流已通过。
@@ -113,6 +132,7 @@ def main():
 | 真实冲突路径 | [原始 Trace]({lc}) |
 | 真实错误与恢复 | [模型错误确认状态被 Guard 拒绝并改正](examples/evidence/live_20261101T133154Z_18c0964f/evaluation.json) |
 | 逐项验收与限制 | [评估矩阵](docs/03-evaluation.md) |
+| 本次审核问题修复 | [真实模型 {review['passed']}/{review['total']}]({review_link})、[修复说明](docs/07-review-fixes.md) |
 
 ## 安装
 
@@ -160,6 +180,8 @@ Mock 是固定逻辑模拟器，只验证业务与工程链路。与真实模型
 ```powershell
 python -m src.evaluation --mode mock
 python -m src.evaluation --mode live
+python -m src.review_evaluation --mode mock
+python -m src.review_evaluation --mode live
 ```
 
 评估器为每个案例建立独立数据库，避免跨案例占位；duplicate 在两个独立 Python 进程中复用数据库。每次生成新的批次目录，不覆盖旧事件。保存异常案例会显式注入提交前故障。单独体验该案例：
@@ -168,11 +190,21 @@ python -m src.evaluation --mode live
 python -m src.main --mode mock --input examples/save_failure.input.json --db runs/failure.db --simulate-save-failure
 ```
 
-若手动用默认共享数据库运行不同请求，相同渠道市场时间可能被之前的 READY 草稿占用，这是业务规则生效。重复运行同一原始请求返回 ALREADY_EXISTS；新 request_id 是独立需求。
+若手动用默认共享数据库运行不同请求，相同渠道市场时间可能被之前的 READY 草稿占用，这是业务规则生效。重复请求会重新检查已有草稿的当前时段：仍有效则 ALREADY_EXISTS；失效的待确认建议可在模型查询新时段后，以同一 ID 重排，返回 SAVED / REPLANNED 并保留历史。已批准草稿失效时明确要求处理，不会静默重新批准。新 request_id 是独立需求。
+
+## 更换已有排期数据
+
+`data/schedules.json` 是初始化种子，不会在启动时覆盖数据库里的调整。修改源文件后，显式同步：
+
+```powershell
+python -m src.main --sync-schedules data/schedules.json --db runs/drafts.db
+```
+
+此命令不调用模型；按 schedule_id 原子更新提供的时间和状态，省略的 ID 保留，取消需显式填写 CANCELLED。整批校验失败时不更新任何排期。随后用同一个 --db 运行 Agent，即可验证变化后的冲突和重复提交。
 
 ## 如何读结果
 
-CLI 输出 JSON 包括审核证据、原时间、建议时间、待确认项、真实保存结果、执行状态、实际 token usage 和 Trace 文件路径。每次运行有 UUID run_id，生成 `events.jsonl`、`trace.json`、`result.json`；最终批次还记录代码与数据哈希。
+CLI 输出 JSON 包括审核证据、原时间、建议时间、待确认项、schedule_blockers、当前 schedule_check、真实保存结果、执行状态、实际 token usage 和 Trace 文件路径。缺少授权调整窗口的冲突返回 NEEDS_CONFIRMATION，并列出所需输入。每次运行有 UUID run_id，生成 `events.jsonl`、`trace.json`、`result.json`；最终批次还记录代码与数据哈希。
 
 审核状态为 PASS / NEEDS_INFO / NEEDS_REVIEW / BLOCKED。保存工具为 SAVED / ALREADY_EXISTS / SAVE_FAILED / REJECTED_BY_POLICY。草稿 READY 与 AWAITING_CONFIRMATION 均未发布；硬性时间的替代必须待用户确认。相同渠道市场、开始时间相距严格小于 60 分钟发生冲突；待确认建议不占位，READY 草稿占位。
 
@@ -187,22 +219,19 @@ COMPLETED 表示所有素材得到明确处理结果，可能包含阻断或保�
 - `guard.py`、`scheduler.py`、`storage.py`：确认边界、冲突校验与 SQLite 事务幂等。
 - `tracing.py`、`evaluation.py`：观测、脱敏、来源快照和实际验收。
 - [需求分析](docs/01-requirements.md)、[技术方案](docs/02-solution.md)、[评估报告](docs/03-evaluation.md)、[AI 使用记录](docs/04-ai-usage.md)、[真实复盘](docs/05-retrospective.md)。
-- [开发时间记录](docs/development-record.json)、[GitHub 交付说明](docs/06-delivery.md)。
+- [初次开发时间记录](docs/development-record.json)、[最新证据索引](docs/latest-evidence.json)、[GitHub 交付说明](docs/06-delivery.md)、[审核修复说明](docs/07-review-fixes.md)。
 
 限制：当前是单机、合成元数据审核；没有视觉审核、真实许可查询、用户身份认证或生产发布。真实样本数量有限，案例通过不代表生产可靠性。CI 配置随仓库提供，实际远程执行状态以 GitHub 为准。
 
 本地交付核查：`python scripts/verify_delivery.py`，扫描已暂存或跟踪文件的凭据及证据完整性。密钥、本地数据库、虚拟环境、缓存和运行目录都被 `.gitignore` 排除。
 """
     (ROOT / "README.md").write_text(readme, encoding="utf-8")
-    metadata = {"first_verified_clock_utc": "2026-11-01T13:23:56+00:00", "report_generated_at_utc": datetime.now(timezone.utc).isoformat(),
-                "client_timezone": "Asia/Taipei", "measurement": "Wall-clock interval from first tool clock reading to report generation; not human labor time or model-only compute time.",
+    metadata = {"report_generated_at_utc": datetime.now(timezone.utc).isoformat(),
+                "client_timezone": "Asia/Taipei",
                 "pytest_passed": int(match[1]), "pytest_measured_seconds": float(match[2]),
                 "latest_live_report": relative_live, "latest_mock_report": relative_mock,
-                "source_fingerprint": snapshot}
-    start = datetime.fromisoformat(metadata["first_verified_clock_utc"])
-    end = datetime.fromisoformat(metadata["report_generated_at_utc"])
-    metadata["verified_elapsed_seconds"] = round((end-start).total_seconds(), 3)
-    (ROOT / "docs/development-record.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
+                "source_fingerprint": snapshot, "review_live_report": review_link, "review_mock_report": mock_review_link}
+    (ROOT / "docs/latest-evidence.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     print(json.dumps(metadata, indent=2))
 
 

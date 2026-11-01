@@ -1,0 +1,192 @@
+FFFFFFFFFFFFFFFF.FFF.FFFF                                                [100%]
+================================== FAILURES ===================================
+_______________ test_stale_pending_replans_same_id_with_history _______________
+tests\test_review_regressions.py:43: in test_stale_pending_replans_same_id_with_history
+    assert result["status"] == "SAVED"
+E   AssertionError: assert 'ALREADY_EXISTS' == 'SAVED'
+E     
+E     - SAVED
+E     + ALREADY_EXISTS
+_________________ test_valid_pending_repeat_does_not_rewrite __________________
+tests\test_review_regressions.py:67: in test_valid_pending_repeat_does_not_rewrite
+    assert repeated.repository.history(first["draft_id"]) == []
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'DraftRepository' object has no attribute 'history'
+_ test_replan_keeps_confirmation_and_window_guard[2027-01-15T21:00:00-05:00-WITHIN_FLEXIBILITY] _
+tests\test_review_regressions.py:81: in test_replan_keeps_confirmation_and_window_guard
+    assert result["status"] == "REJECTED_BY_POLICY"
+E   AssertionError: assert 'ALREADY_EXISTS' == 'REJECTED_BY_POLICY'
+E     
+E     - REJECTED_BY_POLICY
+E     + ALREADY_EXISTS
+_ test_replan_keeps_confirmation_and_window_guard[2027-01-15T21:00:00-05:00-USER_CONFIRMED] _
+tests\test_review_regressions.py:81: in test_replan_keeps_confirmation_and_window_guard
+    assert result["status"] == "REJECTED_BY_POLICY"
+E   AssertionError: assert 'ALREADY_EXISTS' == 'REJECTED_BY_POLICY'
+E     
+E     - REJECTED_BY_POLICY
+E     + ALREADY_EXISTS
+_ test_replan_keeps_confirmation_and_window_guard[2027-01-15T22:00:00-05:00-PENDING] _
+tests\test_review_regressions.py:81: in test_replan_keeps_confirmation_and_window_guard
+    assert result["status"] == "REJECTED_BY_POLICY"
+E   AssertionError: assert 'ALREADY_EXISTS' == 'REJECTED_BY_POLICY'
+E     
+E     - REJECTED_BY_POLICY
+E     + ALREADY_EXISTS
+______________ test_replan_failure_rolls_back_update_and_history ______________
+tests\test_review_regressions.py:94: in test_replan_failure_rolls_back_update_and_history
+    assert result["status"] == "SAVE_FAILED"
+E   AssertionError: assert 'ALREADY_EXISTS' == 'SAVE_FAILED'
+E     
+E     - SAVE_FAILED
+E     + ALREADY_EXISTS
+__________________ test_concurrent_replan_only_revises_once ___________________
+tests\test_review_regressions.py:108: in test_concurrent_replan_only_revises_once
+    assert sum(r["status"] == "SAVED" for r in results) == 1
+E   assert 0 == 1
+E    +  where 0 = sum(<generator object test_concurrent_replan_only_revises_once.<locals>.<genexpr> at 0x000001FDCF49C2B0>)
+_______________ test_ready_conflict_is_not_silently_reapproved ________________
+tests\test_review_regressions.py:125: in test_ready_conflict_is_not_silently_reapproved
+    assert result["status"] == "REJECTED_BY_POLICY"
+E   AssertionError: assert 'ALREADY_EXISTS' == 'REJECTED_BY_POLICY'
+E     
+E     - REJECTED_BY_POLICY
+E     + ALREADY_EXISTS
+___________ test_conflict_after_commit_is_reported_in_final_outcome ___________
+tests\test_review_regressions.py:138: in test_conflict_after_commit_is_reported_in_final_outcome
+    assert outcome["status"] == "NEEDS_CONFIRMATION"
+E   AssertionError: assert 'DRAFT_SAVED' == 'NEEDS_CONFIRMATION'
+E     
+E     - NEEDS_CONFIRMATION
+E     + DRAFT_SAVED
+________________ test_invalid_claim_types_are_rejected[false] _________________
+tests\test_review_regressions.py:149: in test_invalid_claim_types_are_rejected
+    with pytest.raises(ValidationError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+_________________ test_invalid_claim_types_are_rejected[true] _________________
+tests\test_review_regressions.py:149: in test_invalid_claim_types_are_rejected
+    with pytest.raises(ValidationError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+_________________ test_invalid_claim_types_are_rejected[0_0] __________________
+tests\test_review_regressions.py:149: in test_invalid_claim_types_are_rejected
+    with pytest.raises(ValidationError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+__________________ test_invalid_claim_types_are_rejected[1] ___________________
+tests\test_review_regressions.py:149: in test_invalid_claim_types_are_rejected
+    with pytest.raises(ValidationError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+_________________ test_invalid_claim_types_are_rejected[0_1] __________________
+tests\test_review_regressions.py:149: in test_invalid_claim_types_are_rejected
+    with pytest.raises(ValidationError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+________________ test_invalid_claim_types_are_rejected[value5] ________________
+tests\test_review_regressions.py:149: in test_invalid_claim_types_are_rejected
+    with pytest.raises(ValidationError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+________________ test_invalid_claim_types_are_rejected[value6] ________________
+tests\test_review_regressions.py:149: in test_invalid_claim_types_are_rejected
+    with pytest.raises(ValidationError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+__________ test_unknown_or_unverified_claim_needs_review[metadata1] ___________
+tests\test_review_regressions.py:159: in test_unknown_or_unverified_claim_needs_review
+    assert reviewer.check(Material.model_validate(material), schedule_request).review_status == "NEEDS_REVIEW"
+E   AssertionError: assert 'PASS' == 'NEEDS_REVIEW'
+E     
+E     - NEEDS_REVIEW
+E     + PASS
+__________ test_unknown_or_unverified_claim_needs_review[metadata2] ___________
+tests\test_review_regressions.py:159: in test_unknown_or_unverified_claim_needs_review
+    assert reviewer.check(Material.model_validate(material), schedule_request).review_status == "NEEDS_REVIEW"
+E   AssertionError: assert 'PASS' == 'NEEDS_REVIEW'
+E     
+E     - NEEDS_REVIEW
+E     + PASS
+__________ test_unknown_or_unverified_claim_needs_review[metadata3] ___________
+tests\test_review_regressions.py:159: in test_unknown_or_unverified_claim_needs_review
+    assert reviewer.check(Material.model_validate(material), schedule_request).review_status == "NEEDS_REVIEW"
+E   AssertionError: assert 'PASS' == 'NEEDS_REVIEW'
+E     
+E     - NEEDS_REVIEW
+E     + PASS
+_______________ test_conflict_confirmation_reaches_final_output _______________
+tests\test_review_regressions.py:179: in test_conflict_confirmation_reaches_final_output
+    assert result["execution_status"] == "COMPLETED"
+E   AssertionError: assert 'INCOMPLETE' == 'COMPLETED'
+E     
+E     - COMPLETED
+E     ?         -
+E     + INCOMPLETE
+E     ? ++
+_____________________ test_no_change_lookup_keeps_review ______________________
+tests\test_review_regressions.py:192: in test_no_change_lookup_keeps_review
+    assert registry.outcomes()[0]["review"]["review_status"] == "PASS"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+__________ test_explicit_schedule_sync_moves_and_cancels_atomically ___________
+tests\test_review_regressions.py:202: in test_explicit_schedule_sync_moves_and_cancels_atomically
+    assert repository.sync_schedules(path)["updated"] == 1
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'DraftRepository' object has no attribute 'sync_schedules'
+______________________ test_standalone_schedule_sync_cli ______________________
+D:\conda\Lib\argparse.py:1931: in parse_known_args
+    namespace, args = self._parse_known_args(args, namespace)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\conda\Lib\argparse.py:2196: in _parse_known_args
+    raise ArgumentError(None, _('the following arguments are required: %s') %
+E   argparse.ArgumentError: the following arguments are required: --mode, --input
+
+During handling of the above exception, another exception occurred:
+tests\test_review_regressions.py:220: in test_standalone_schedule_sync_cli
+    assert main(["--sync-schedules", str(path), "--db", str(tmp_path / "cli.db"), "--output-dir", str(tmp_path / "traces")]) == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\main.py:48: in main
+    args = parser.parse_args(argv)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+D:\conda\Lib\argparse.py:1895: in parse_args
+    args, argv = self.parse_known_args(args, namespace)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\conda\Lib\argparse.py:1933: in parse_known_args
+    self.error(str(err))
+D:\conda\Lib\argparse.py:2672: in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+D:\conda\Lib\argparse.py:2659: in exit
+    _sys.exit(status)
+E   SystemExit: 2
+---------------------------- Captured stderr call -----------------------------
+usage: __main__.py [-h] --mode {live,mock} --input INPUT [--db DB]
+                   [--output-dir OUTPUT_DIR] [--max-steps MAX_STEPS]
+                   [--max-tool-calls MAX_TOOL_CALLS] [--timeout TIMEOUT]
+                   [--simulate-save-failure]
+__main__.py: error: the following arguments are required: --mode, --input
+=========================== short test summary info ===========================
+FAILED tests/test_review_regressions.py::test_stale_pending_replans_same_id_with_history
+FAILED tests/test_review_regressions.py::test_valid_pending_repeat_does_not_rewrite
+FAILED tests/test_review_regressions.py::test_replan_keeps_confirmation_and_window_guard[2027-01-15T21:00:00-05:00-WITHIN_FLEXIBILITY]
+FAILED tests/test_review_regressions.py::test_replan_keeps_confirmation_and_window_guard[2027-01-15T21:00:00-05:00-USER_CONFIRMED]
+FAILED tests/test_review_regressions.py::test_replan_keeps_confirmation_and_window_guard[2027-01-15T22:00:00-05:00-PENDING]
+FAILED tests/test_review_regressions.py::test_replan_failure_rolls_back_update_and_history
+FAILED tests/test_review_regressions.py::test_concurrent_replan_only_revises_once
+FAILED tests/test_review_regressions.py::test_ready_conflict_is_not_silently_reapproved
+FAILED tests/test_review_regressions.py::test_conflict_after_commit_is_reported_in_final_outcome
+FAILED tests/test_review_regressions.py::test_invalid_claim_types_are_rejected[false]
+FAILED tests/test_review_regressions.py::test_invalid_claim_types_are_rejected[true]
+FAILED tests/test_review_regressions.py::test_invalid_claim_types_are_rejected[0_0]
+FAILED tests/test_review_regressions.py::test_invalid_claim_types_are_rejected[1]
+FAILED tests/test_review_regressions.py::test_invalid_claim_types_are_rejected[0_1]
+FAILED tests/test_review_regressions.py::test_invalid_claim_types_are_rejected[value5]
+FAILED tests/test_review_regressions.py::test_invalid_claim_types_are_rejected[value6]
+FAILED tests/test_review_regressions.py::test_unknown_or_unverified_claim_needs_review[metadata1]
+FAILED tests/test_review_regressions.py::test_unknown_or_unverified_claim_needs_review[metadata2]
+FAILED tests/test_review_regressions.py::test_unknown_or_unverified_claim_needs_review[metadata3]
+FAILED tests/test_review_regressions.py::test_conflict_confirmation_reaches_final_output
+FAILED tests/test_review_regressions.py::test_no_change_lookup_keeps_review
+FAILED tests/test_review_regressions.py::test_explicit_schedule_sync_moves_and_cancels_atomically
+FAILED tests/test_review_regressions.py::test_standalone_schedule_sync_cli - ...
+23 failed, 2 passed in 2.76s

@@ -1,0 +1,7 @@
+{
+  "recorded_at_utc": "2026-11-01T14:16:04.200699+00:00",
+  "command": ".\\.venv\\Scripts\\python -X utf8 -m pytest -q --basetemp runs/repair-green-tests-final -o cache_dir=runs/repair-green-cache-final",
+  "result_file": "examples/test-results.txt",
+  "passed": 93,
+  "measured_seconds": 6.49
+}

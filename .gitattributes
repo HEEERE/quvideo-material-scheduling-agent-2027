@@ -2,3 +2,5 @@
 # Preserve original execution evidence byte-for-byte.
 examples/evidence/** -text
 examples/test-results*.txt -text
+# Pytest failure output is verbatim evidence, including its diagnostic padding.
+examples/review-regressions-before.txt -text -whitespace

@@ -44,6 +44,17 @@ def main():
                     errors.append("Missing source provenance: " + str(path.relative_to(ROOT)))
                 elif any(hashlib.sha256((ROOT / name).read_bytes()).hexdigest() != digest for name, digest in manifest.items()):
                     errors.append("Source differs from final evidence: " + case["case_id"])
+        regression_reports = [json.loads(p.read_text(encoding="utf-8")) for p in (ROOT / "examples/evidence").glob("review_*/regressions.json")]
+        regressions = sorted([r for r in regression_reports if r["execution_mode"] == mode], key=lambda r: r["started_at"])
+        if not regressions or regressions[-1]["passed"] != 2 or regressions[-1]["total"] != 2:
+            errors.append("Missing successful reviewed-boundary evidence for: " + mode)
+        else:
+            for case in regressions[-1]["cases"]:
+                for links in case["traces"]:
+                    first = json.loads((ROOT / links["events"]).read_text(encoding="utf-8").splitlines()[0])
+                    manifest = first.get("source_files_sha256", {})
+                    if not manifest or any(hashlib.sha256((ROOT / name).read_bytes()).hexdigest() != digest for name, digest in manifest.items()):
+                        errors.append("Reviewed-boundary source mismatch: " + case["case_id"])
     if not files or not files[0]:
         errors.append("No staged/tracked files to audit")
     print(json.dumps({"checked_files": len(list(filter(None, files))), "errors": errors}, indent=2))

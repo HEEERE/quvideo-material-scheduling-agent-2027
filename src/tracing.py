@@ -52,7 +52,7 @@ class TraceRecorder:
         self.event("run_finished", step_index=result.get("decision_steps", 0), selected_action="finish",
                    execution_status=result["execution_status"], error_summary=result.get("errors", []))
         compact = []
-        actions = [e for e in self.events if e["event_type"] in {"tool_result", "model_final", "runtime_error", "budget_exhausted"}]
+        actions = [e for e in self.events if e["event_type"] in {"tool_result", "model_final", "runtime_error", "budget_exhausted", "schedule_sync"}]
         for i, event in enumerate(actions):
             entry = {k: v for k, v in event.items() if k not in {"tool_response", "model_public_content"}}
             entry["next_action"] = actions[i + 1].get("selected_action", "finish") if i + 1 < len(actions) else "finish"

@@ -1,0 +1,128 @@
+{
+  "run_id": "run_386032702fcf4b889f2c8176ab4c6af7",
+  "case_id": "changed_slot.input",
+  "execution_mode": "live",
+  "model_name": "deepseek-flash",
+  "execution_status": "INCOMPLETE",
+  "decision_steps": 7,
+  "tool_calls": 6,
+  "outcomes": [
+    {
+      "material_id": "M01",
+      "status": "INCOMPLETE",
+      "review": {
+        "material_id": "M01",
+        "review_status": "PASS",
+        "risk_level": "LOW",
+        "risk_reasons": [],
+        "matched_rules": [],
+        "missing_fields": [],
+        "requires_manual_review": false
+      },
+      "original_publish_time": "2027-01-15T18:00:00-05:00",
+      "suggested_publish_time": null,
+      "pending_items": [],
+      "schedule_blockers": [
+        {
+          "code": "NO_AVAILABLE_QUERIED_SLOT",
+          "publish_time": "2027-01-15T18:00:00-05:00",
+          "conflicts": [
+            {
+              "source": "formal",
+              "id": "SYN-US-1800",
+              "publish_time": "2027-01-15T23:00:00+00:00"
+            }
+          ],
+          "queried_available_times": [],
+          "requires_user_input": false,
+          "message": "The requested time conflicts. Query and save a permitted alternative, or ask to expand the window if further searching cannot resolve the conflict."
+        }
+      ],
+      "schedule_check": null,
+      "save_status": "NOT_ATTEMPTED",
+      "draft": null,
+      "verification_error": null
+    }
+  ],
+  "errors": [],
+  "token_usage_per_request": [
+    {
+      "prompt_tokens": 1738,
+      "completion_tokens": 76,
+      "total_tokens": 1814,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 1610
+    },
+    {
+      "prompt_tokens": 1970,
+      "completion_tokens": 70,
+      "total_tokens": 2040,
+      "prompt_tokens_details": {
+        "cached_tokens": 1792
+      },
+      "prompt_cache_hit_tokens": 1792,
+      "prompt_cache_miss_tokens": 178
+    },
+    {
+      "prompt_tokens": 2101,
+      "completion_tokens": 102,
+      "total_tokens": 2203,
+      "prompt_tokens_details": {
+        "cached_tokens": 1920
+      },
+      "prompt_cache_hit_tokens": 1920,
+      "prompt_cache_miss_tokens": 181
+    },
+    {
+      "prompt_tokens": 2432,
+      "completion_tokens": 126,
+      "total_tokens": 2558,
+      "prompt_tokens_details": {
+        "cached_tokens": 2176
+      },
+      "prompt_cache_hit_tokens": 2176,
+      "prompt_cache_miss_tokens": 256
+    },
+    {
+      "prompt_tokens": 2787,
+      "completion_tokens": 102,
+      "total_tokens": 2889,
+      "prompt_tokens_details": {
+        "cached_tokens": 2304
+      },
+      "prompt_cache_hit_tokens": 2304,
+      "prompt_cache_miss_tokens": 483
+    },
+    {
+      "prompt_tokens": 3118,
+      "completion_tokens": 102,
+      "total_tokens": 3220,
+      "prompt_tokens_details": {
+        "cached_tokens": 2816
+      },
+      "prompt_cache_hit_tokens": 2816,
+      "prompt_cache_miss_tokens": 302
+    },
+    {
+      "prompt_tokens": 3449,
+      "completion_tokens": 410,
+      "total_tokens": 3859,
+      "prompt_tokens_details": {
+        "cached_tokens": 3200
+      },
+      "prompt_cache_hit_tokens": 3200,
+      "prompt_cache_miss_tokens": 249
+    }
+  ],
+  "publication_capability": false,
+  "fault_injection": false,
+  "finished_at": "2026-11-01T14:13:29.624698+00:00",
+  "trace_files": {
+    "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\review_live_20261101T141308Z_41037829\\run_386032702fcf4b889f2c8176ab4c6af7\\events.jsonl",
+    "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\review_live_20261101T141308Z_41037829\\run_386032702fcf4b889f2c8176ab4c6af7\\trace.json",
+    "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\review_live_20261101T141308Z_41037829\\run_386032702fcf4b889f2c8176ab4c6af7\\result.json"
+  }
+}

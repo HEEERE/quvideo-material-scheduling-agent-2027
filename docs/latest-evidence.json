@@ -1,0 +1,11 @@
+{
+  "report_generated_at_utc": "2026-11-01T14:19:34.083445+00:00",
+  "client_timezone": "Asia/Taipei",
+  "pytest_passed": 93,
+  "pytest_measured_seconds": 6.49,
+  "latest_live_report": "examples/evidence/live_20261101T141612Z_81be7847/evaluation.json",
+  "latest_mock_report": "examples/evidence/mock_20261101T141619Z_8d4782c5/evaluation.json",
+  "source_fingerprint": "35c99bb683a74412ce9533312292fcbb85a0d34071e5acb15aca87a8d9fc3e9b",
+  "review_live_report": "examples/evidence/review_live_20261101T141619Z_0c75a215/regressions.json",
+  "review_mock_report": "examples/evidence/review_mock_20261101T141627Z_4f8aad77/regressions.json"
+}

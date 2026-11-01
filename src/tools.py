@@ -33,7 +33,7 @@ TOOL_PROTOCOLS = {
     "lookup_material_info": (MaterialArgs, "Look up missing authorization in a trusted synthetic register. May still return STILL_MISSING. Never invent license data; review again after lookup."),
     "check_review_rules": (MaterialArgs, "Deterministically review previously read material against the immutable original request. Only PASS allows a draft. NEEDS_INFO needs supplementary evidence; BLOCKED/NEEDS_REVIEW stop scheduling."),
     "query_schedule": (QueryArgs, "Query one exact ISO8601 time with offset, using immutable channel/market. Read material first. Observe conflicts, choose and query another time if necessary. No implicit approval of alternatives."),
-    "save_schedule_draft": (SaveArgs, "Save reviewed, queried draft transactionally. For unchanged time use ORIGINAL_REQUEST; hard-time alternative requires PENDING unless explicit input confirmation grants USER_CONFIRMED; soft alternative inside window uses WITHIN_FLEXIBILITY. Returns actual SAVED/ALREADY_EXISTS/SAVE_FAILED/REJECTED_BY_POLICY. Never publishes."),
+    "save_schedule_draft": (SaveArgs, "Save reviewed, queried draft transactionally. For unchanged time use ORIGINAL_REQUEST; hard-time alternative requires PENDING unless explicit input confirmation grants USER_CONFIRMED; soft alternative inside window uses WITHIN_FLEXIBILITY. An invalid pending suggestion may be replanned under the same draft_id after querying a new legal time. Valid existing drafts return ALREADY_EXISTS; invalid approved drafts require user action. Returns actual SAVED/ALREADY_EXISTS/SAVE_FAILED/REJECTED_BY_POLICY. Never publishes."),
 }
 
 
@@ -52,6 +52,7 @@ class ToolRegistry:
         self.loaded: dict[str, Material] = {}
         self.reviews = {}
         self.queried: dict[str, set[str]] = {}
+        self.schedule_observations: dict[str, dict[str, dict]] = {}
         self.save_results: dict[str, dict] = {}
         self.not_found: set[str] = set()
 
@@ -71,14 +72,17 @@ class ToolRegistry:
                 if not material:
                     self.not_found.add(mid)
                     return {"status": "NOT_FOUND", "material_id": mid}
+                if mid not in self.loaded or self.loaded[mid].model_dump() != material.model_dump():
+                    self.reviews.pop(mid, None)
                 self.loaded[mid] = material
-                self.reviews.pop(mid, None)
                 return {"status": "OK", "material": material.model_dump(mode="json")}
             if mid not in self.loaded:
                 return {"status": "REJECTED_BY_POLICY", "error": "READ_MATERIAL_FIRST"}
             if name == "lookup_material_info":
-                self.loaded[mid], record = self.materials.lookup(self.loaded[mid])
-                self.reviews.pop(mid, None)
+                updated, record = self.materials.lookup(self.loaded[mid])
+                if updated.model_dump() != self.loaded[mid].model_dump():
+                    self.reviews.pop(mid, None)
+                self.loaded[mid] = updated
                 return {**record, "material": self.loaded[mid].model_dump(mode="json")}
             if name == "check_review_rules":
                 review = self.reviewer.check(self.loaded[mid], self.request)
@@ -87,6 +91,7 @@ class ToolRegistry:
             if name == "query_schedule":
                 result = self.repository.query(self.scheduler, self.request, mid, args.publish_time)
                 self.queried.setdefault(mid, set()).add(utc_iso(args.publish_time))
+                self.schedule_observations.setdefault(mid, {})[utc_iso(args.publish_time)] = result
                 return result
             if name == "save_schedule_draft":
                 if mid not in self.reviews:
@@ -108,6 +113,32 @@ class ToolRegistry:
             return {"status": "TOOL_ERROR", "error": type(exc).__name__}
         return {"status": "TOOL_ERROR", "error": "Unreachable dispatch"}
 
+    def _schedule_blockers(self, mid: str, saved: dict, current_slot: dict | None) -> list[dict]:
+        if current_slot and not current_slot["available"]:
+            return [{"code": "EXISTING_DRAFT_CONFLICT", "publish_time": current_slot["publish_time"],
+                     "conflicts": current_slot["conflicts"], "requires_user_input": True,
+                     "message": "The persisted draft time is now occupied. Replan a pending suggestion or explicitly confirm a new available time."}]
+        if saved.get("status") == "REJECTED_BY_POLICY":
+            reason = saved.get("error", "Policy rejected the draft")
+            return [{"code": "SCHEDULE_POLICY_REJECTED", "requires_user_input": reason.startswith("EXISTING_DRAFT_INVALID"),
+                     "message": reason}]
+        observations = self.schedule_observations.get(mid, {})
+        original = observations.get(utc_iso(self.request.requested_publish_time))
+        if original and not original["available"]:
+            has_confirmation = any(c.material_id == mid for c in self.request.user_confirmations)
+            needs_window = self.request.flexible_time_window is None and not has_confirmation
+            if needs_window:
+                return [{"code": "REQUESTED_SLOT_UNAVAILABLE", "publish_time": original["publish_time"],
+                         "conflicts": original["conflicts"], "requires_user_input": True,
+                         "requested_fields": ["flexible_time_window", "user_confirmations"],
+                         "message": "Requested publish time is occupied. Provide a flexible_time_window or explicit user_confirmations for an available alternative; the hard requirement remains unchanged."}]
+            available = [slot["publish_time"] for slot in observations.values() if slot["available"]]
+            return [{"code": "ALTERNATIVE_NOT_SAVED" if available else "NO_AVAILABLE_QUERIED_SLOT",
+                     "publish_time": original["publish_time"], "conflicts": original["conflicts"],
+                     "queried_available_times": available, "requires_user_input": False,
+                     "message": "The requested time conflicts. Query and save a permitted alternative, or ask to expand the window if further searching cannot resolve the conflict."}]
+        return []
+
     def outcomes(self) -> list[dict]:
         outcomes = []
         for mid in self.request.material_ids:
@@ -115,15 +146,19 @@ class ToolRegistry:
             saved = self.save_results.get(mid, {})
             draft = None
             verification_error = None
+            schedule_check = None
             if saved.get("status") in {"SAVED", "ALREADY_EXISTS"}:
                 # Output success only with a matching committed record.
                 try:
                     draft = self.repository.get(self.request.fingerprint(), mid)
+                    if draft and draft["draft_id"] == saved["draft_id"]:
+                        schedule_check = self.repository.query(self.scheduler, self.request, mid,
+                                                              datetime.fromisoformat(draft["suggested_publish_time"]))
                 except Exception as exc:
                     # Loss of storage access cannot be reported as verified success.
                     draft = None
                     verification_error = {"code": "DATABASE_VERIFICATION_FAILED", "type": type(exc).__name__}
-                status = "DRAFT_SAVED" if draft and draft["draft_id"] == saved["draft_id"] else "INCOMPLETE"
+                status = "DRAFT_SAVED" if draft and draft["draft_id"] == saved["draft_id"] and not verification_error else "INCOMPLETE"
             elif saved.get("status") == "SAVE_FAILED":
                 status = "SAVE_FAILED"
             elif review and review.review_status != "PASS":
@@ -132,11 +167,22 @@ class ToolRegistry:
                 status = "NOT_FOUND"
             else:
                 status = "INCOMPLETE"
+            blockers = self._schedule_blockers(mid, saved, schedule_check) if status not in {"NEEDS_INFO", "NEEDS_REVIEW", "BLOCKED", "NOT_FOUND"} else []
+            if status != "SAVE_FAILED" and verification_error is None and any(b["requires_user_input"] for b in blockers):
+                status = "NEEDS_CONFIRMATION"
+            # A successful, still-valid pending draft needs confirmation of its exact time.
+            if status == "DRAFT_SAVED":
+                blockers = []
+            pending = [b["message"] for b in blockers if b["requires_user_input"]]
+            if status == "DRAFT_SAVED" and draft["confirmation_status"] == "PENDING":
+                pending.append("Explicit user confirmation for the alternative time")
+            if review and review.review_status != "PASS":
+                pending.extend(review.risk_reasons)
             outcomes.append({"material_id": mid, "status": status,
                              "review": review.model_dump(mode="json") if review else None,
                              "original_publish_time": self.request.requested_publish_time.isoformat(),
-                             "suggested_publish_time": draft["suggested_publish_time"] if draft else None,
-                             "pending_items": (["Explicit user confirmation for the alternative time"] if draft and draft["confirmation_status"] == "PENDING" else []) + (review.risk_reasons if review and review.review_status != "PASS" else []),
+                             "suggested_publish_time": draft["suggested_publish_time"] if status == "DRAFT_SAVED" else None,
+                             "pending_items": pending, "schedule_blockers": blockers, "schedule_check": schedule_check,
                              "save_status": saved.get("status", "NOT_ATTEMPTED"), "draft": draft,
                              "verification_error": verification_error})
         return outcomes

@@ -1,0 +1,95 @@
+{
+  "run_id": "run_e8e1cd3ecd6f4ad0b4ec70dc7dd7c25c",
+  "case_id": "missing.input",
+  "execution_mode": "live",
+  "model_name": "deepseek-flash",
+  "execution_status": "COMPLETED",
+  "decision_steps": 4,
+  "tool_calls": 4,
+  "outcomes": [
+    {
+      "material_id": "M02",
+      "status": "NEEDS_INFO",
+      "review": {
+        "material_id": "M02",
+        "review_status": "NEEDS_INFO",
+        "risk_level": "MEDIUM",
+        "risk_reasons": [
+          "Missing required metadata: copyright_status, authorization_scope",
+          "Reliable copyright authorization must be supplied"
+        ],
+        "matched_rules": [
+          "METADATA_REQUIRED",
+          "LICENSE_UNKNOWN"
+        ],
+        "missing_fields": [
+          "authorization_scope",
+          "copyright_status"
+        ],
+        "requires_manual_review": true
+      },
+      "original_publish_time": "2027-01-15T16:00:00-05:00",
+      "suggested_publish_time": null,
+      "pending_items": [
+        "Missing required metadata: copyright_status, authorization_scope",
+        "Reliable copyright authorization must be supplied"
+      ],
+      "schedule_blockers": [],
+      "schedule_check": null,
+      "save_status": "NOT_ATTEMPTED",
+      "draft": null,
+      "verification_error": null
+    }
+  ],
+  "errors": [],
+  "token_usage_per_request": [
+    {
+      "prompt_tokens": 1737,
+      "completion_tokens": 75,
+      "total_tokens": 1812,
+      "prompt_tokens_details": {
+        "cached_tokens": 1408
+      },
+      "prompt_cache_hit_tokens": 1408,
+      "prompt_cache_miss_tokens": 329
+    },
+    {
+      "prompt_tokens": 1970,
+      "completion_tokens": 150,
+      "total_tokens": 2120,
+      "prompt_tokens_details": {
+        "cached_tokens": 1792
+      },
+      "prompt_cache_hit_tokens": 1792,
+      "prompt_cache_miss_tokens": 178
+    },
+    {
+      "prompt_tokens": 2410,
+      "completion_tokens": 83,
+      "total_tokens": 2493,
+      "prompt_tokens_details": {
+        "cached_tokens": 2048
+      },
+      "prompt_cache_hit_tokens": 2048,
+      "prompt_cache_miss_tokens": 362
+    },
+    {
+      "prompt_tokens": 2597,
+      "completion_tokens": 428,
+      "total_tokens": 3025,
+      "prompt_tokens_details": {
+        "cached_tokens": 2432
+      },
+      "prompt_cache_hit_tokens": 2432,
+      "prompt_cache_miss_tokens": 165
+    }
+  ],
+  "publication_capability": false,
+  "fault_injection": false,
+  "finished_at": "2026-11-01T14:16:40.277278+00:00",
+  "trace_files": {
+    "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T141612Z_81be7847\\run_e8e1cd3ecd6f4ad0b4ec70dc7dd7c25c\\events.jsonl",
+    "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T141612Z_81be7847\\run_e8e1cd3ecd6f4ad0b4ec70dc7dd7c25c\\trace.json",
+    "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\live_20261101T141612Z_81be7847\\run_e8e1cd3ecd6f4ad0b4ec70dc7dd7c25c\\result.json"
+  }
+}
