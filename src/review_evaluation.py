@@ -12,6 +12,7 @@ from pathlib import Path
 
 from .main import ROOT
 from .storage import DraftRepository
+from .tracing import evidence_path
 
 
 def invoke(arguments: list[str]) -> dict:
@@ -23,13 +24,13 @@ def invoke(arguments: list[str]) -> dict:
 
 
 def trace_links(*executions) -> list[dict]:
-    return [{k: Path(v).relative_to(ROOT).as_posix() for k, v in item["result"].get("trace_files", {}).items()}
+    return [{k: evidence_path(v) for k, v in item["result"].get("trace_files", {}).items()}
             for item in executions]
 
 
 def evaluate(mode: str, output_dir: Path) -> Path:
     start = datetime.now(timezone.utc)
-    batch = output_dir / ("review_" + mode + "_" + start.strftime("%Y%m%dT%H%M%SZ") + "_" + uuid.uuid4().hex[:8])
+    batch = output_dir.resolve() / ("review_" + mode + "_" + start.strftime("%Y%m%dT%H%M%SZ") + "_" + uuid.uuid4().hex[:8])
     batch.mkdir(parents=True)
     database_dir = ROOT / "runs" / batch.name
     database_dir.mkdir(parents=True)
@@ -64,7 +65,7 @@ def evaluate(mode: str, output_dir: Path) -> Path:
                   and new["revision"] == 2 and outcome["schedule_check"]["available"]
                   and len(repository.all()) == 1 and len(history) == 1)
         cases.append({"case_id": "changed_slot_repeat", "passed": bool(passed),
-                      "input": input_path.relative_to(ROOT).as_posix(), "first": first, "sync": sync,
+                      "input": evidence_path(input_path), "first": first, "sync": sync,
                       "repeat": repeated, "database_snapshot": repository.all(), "draft_history": history,
                       "traces": trace_links(first, sync, repeated)})
     except (ValueError, KeyError, IndexError, TypeError, OSError, subprocess.SubprocessError) as exc:
@@ -82,7 +83,7 @@ def evaluate(mode: str, output_dir: Path) -> Path:
                   and outcome["draft"] is None and outcome["pending_items"]
                   and outcome["schedule_blockers"][0]["code"] == "REQUESTED_SLOT_UNAVAILABLE")
         cases.append({"case_id": "no_window_confirmation", "passed": bool(passed),
-                      "input": no_window.relative_to(ROOT).as_posix(), "execution": result, "traces": trace_links(result)})
+                      "input": evidence_path(no_window), "execution": result, "traces": trace_links(result)})
     except (ValueError, KeyError, IndexError, TypeError, OSError, subprocess.SubprocessError) as exc:
         cases.append({"case_id": "no_window_confirmation", "passed": False, "error_type": type(exc).__name__})
     report = {"execution_mode": mode, "started_at": start.isoformat(), "finished_at": datetime.now(timezone.utc).isoformat(),

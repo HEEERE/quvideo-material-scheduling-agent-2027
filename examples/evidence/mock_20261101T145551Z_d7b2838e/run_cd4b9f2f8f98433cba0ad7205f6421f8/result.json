@@ -1,0 +1,84 @@
+{
+  "run_id": "run_cd4b9f2f8f98433cba0ad7205f6421f8",
+  "case_id": "conflict.input",
+  "execution_mode": "mock",
+  "model_name": "offline-scripted-simulator",
+  "execution_status": "COMPLETED",
+  "decision_steps": 6,
+  "tool_calls": 5,
+  "outcomes": [
+    {
+      "material_id": "M01",
+      "status": "DRAFT_SAVED",
+      "review": {
+        "material_id": "M01",
+        "review_status": "PASS",
+        "risk_level": "LOW",
+        "risk_reasons": [],
+        "matched_rules": [],
+        "missing_fields": [],
+        "requires_manual_review": false
+      },
+      "original_publish_time": "2027-01-15T18:00:00-05:00",
+      "suggested_publish_time": "2027-01-15T19:00:00-05:00",
+      "pending_items": [
+        "Explicit user confirmation for the alternative time"
+      ],
+      "schedule_blockers": [],
+      "schedule_check": {
+        "available": true,
+        "publish_time": "2027-01-15T19:00:00-05:00",
+        "conflicts": [],
+        "conflict_rule": "Same channel and market; start times less than 60 minutes apart conflict. READY drafts reserve globally; pending suggestions also conflict within this request, but do not reserve for other requests.",
+        "search_window": {
+          "start": "2027-01-15T18:00:00-05:00",
+          "end": "2027-01-15T21:00:00-05:00"
+        },
+        "query_horizon_days": 7,
+        "minimum_spacing_minutes": 60,
+        "checked_at": "2026-11-01T14:55:55.515886+00:00",
+        "candidate_time_hints": [],
+        "hint": "Exact minimum-spacing boundaries are legal. Candidate hints have NOT been checked for availability: choose and query them yourself. No alternative is implicitly approved."
+      },
+      "save_status": "SAVED",
+      "draft": {
+        "draft_id": "draft_407b496a42804f4f936ac64c99b9be78",
+        "request_fingerprint": "fd55322c6b27cbdf78d43f9c0c5e257e6526a967b9e5b9f9533946d7f3030f93",
+        "material_id": "M01",
+        "original_publish_time": "2027-01-15T18:00:00-05:00",
+        "suggested_publish_time": "2027-01-15T19:00:00-05:00",
+        "target_channel": "TikTok",
+        "market": "US",
+        "timezone": "America/New_York",
+        "confirmation_status": "PENDING",
+        "review_status": "PASS",
+        "draft_status": "AWAITING_CONFIRMATION",
+        "risk_reasons": [],
+        "confirmation_evidence": [],
+        "created_at": "2026-11-01T14:55:55.478223Z",
+        "updated_at": "2026-11-01T14:55:55.478223Z",
+        "revision": 1
+      },
+      "save_error": null,
+      "review_error": null,
+      "verification_error": null
+    }
+  ],
+  "errors": [],
+  "token_usage_per_request": [
+    "unavailable",
+    "unavailable",
+    "unavailable",
+    "unavailable",
+    "unavailable",
+    "unavailable"
+  ],
+  "publication_capability": false,
+  "fault_injection": false,
+  "finished_at": "2026-11-01T14:55:55.518393+00:00",
+  "trace_files": {
+    "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\mock_20261101T145551Z_d7b2838e\\run_cd4b9f2f8f98433cba0ad7205f6421f8\\events.jsonl",
+    "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\mock_20261101T145551Z_d7b2838e\\run_cd4b9f2f8f98433cba0ad7205f6421f8\\trace.json",
+    "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\mock_20261101T145551Z_d7b2838e\\run_cd4b9f2f8f98433cba0ad7205f6421f8\\result.json"
+  }
+}

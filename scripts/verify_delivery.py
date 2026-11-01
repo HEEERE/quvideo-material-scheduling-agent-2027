@@ -55,6 +55,18 @@ def main():
                     manifest = first.get("source_files_sha256", {})
                     if not manifest or any(hashlib.sha256((ROOT / name).read_bytes()).hexdigest() != digest for name, digest in manifest.items()):
                         errors.append("Reviewed-boundary source mismatch: " + case["case_id"])
+        business_reports = [json.loads(p.read_text(encoding="utf-8")) for p in (ROOT / "examples/evidence").glob("business_*/business.json")]
+        business = sorted([r for r in business_reports if r["execution_mode"] == mode and r["total"] == 5], key=lambda r: r["started_at"])
+        expected = {"confirmation_lifecycle", "confirmation_slot_changed", "batch_pending", "japan_localization", "manual_claim_review"}
+        if not business or business[-1]["passed"] != 5 or {c["case_id"] for c in business[-1]["cases"]} != expected:
+            errors.append("Missing successful operator-simulation evidence for: " + mode)
+        else:
+            for case in business[-1]["cases"]:
+                for links in case["traces"]:
+                    first = json.loads((ROOT / links["events"]).read_text(encoding="utf-8").splitlines()[0])
+                    manifest = first.get("source_files_sha256", {})
+                    if not manifest or any(hashlib.sha256((ROOT / name).read_bytes()).hexdigest() != digest for name, digest in manifest.items()):
+                        errors.append("Operator-simulation source mismatch: " + case["case_id"])
     if not files or not files[0]:
         errors.append("No staged/tracked files to audit")
     print(json.dumps({"checked_files": len(list(filter(None, files))), "errors": errors}, indent=2))

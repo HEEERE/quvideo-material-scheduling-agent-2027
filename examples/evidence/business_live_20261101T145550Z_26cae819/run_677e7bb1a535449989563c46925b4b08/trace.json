@@ -1,0 +1,57 @@
+[
+  {
+    "run_id": "run_677e7bb1a535449989563c46925b4b08",
+    "case_id": "manual_claim_review.review_claim.input",
+    "execution_mode": "live",
+    "timestamp": "2026-11-01T14:58:03.701341+00:00",
+    "model_name": "deepseek-flash",
+    "event_type": "tool_result",
+    "step_index": 1,
+    "selected_action": "read_material",
+    "tool_name": "read_material",
+    "tool_call_id": "call_00_rJ1ufEUJD9yKWB2wy9Uw2544",
+    "tool_arguments": {
+      "material_id": "M05",
+      "reason_summary": "Read M05 to review content before scheduling for TikTok US."
+    },
+    "tool_response_summary": "{\"status\": \"OK\", \"material\": {\"material_id\": \"M05\", \"title\": \"Unverified performance promotion\", \"material_type\": \"marketing_video\", \"content_theme\": \"product performance\", \"target_product\": \"VivaCut\", \"target_market\": \"US\", \"language\": \"en\", \"target_channel\": \"TikTok\", \"copyright_status\": \"AUTHORIZED\", \"authorization_scope\": [\"TikTok:US\"], \"content_tags\": [\"unverified_claim\"], \"review_metadata\": {\"has_promotional_claim\": true, \"claims_verified\": false, \"source\": \"synthetic_fixture\"}, \"missing_fields\": []}}",
+    "next_action": "check_review_rules",
+    "decision_reason_summary": "Read M05 to review content before scheduling for TikTok US.",
+    "execution_status": "OK",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_677e7bb1a535449989563c46925b4b08",
+    "case_id": "manual_claim_review.review_claim.input",
+    "execution_mode": "live",
+    "timestamp": "2026-11-01T14:58:05.750302+00:00",
+    "model_name": "deepseek-flash",
+    "event_type": "tool_result",
+    "step_index": 2,
+    "selected_action": "check_review_rules",
+    "tool_name": "check_review_rules",
+    "tool_call_id": "call_00_NVBpjuYFzvg1IyJL42T10670",
+    "tool_arguments": {
+      "material_id": "M05",
+      "reason_summary": "Deterministically review M05, which carries an unverified promotional claim."
+    },
+    "tool_response_summary": "{\"material_id\": \"M05\", \"review_status\": \"NEEDS_REVIEW\", \"risk_level\": \"MEDIUM\", \"risk_reasons\": [\"Human review required for tag: unverified_claim\", \"Promotional claim lacks verification evidence\"], \"matched_rules\": [\"MANUAL_CONTENT_REVIEW\", \"CLAIM_UNVERIFIED\"], \"missing_fields\": [], \"requires_manual_review\": true}",
+    "next_action": "finish",
+    "decision_reason_summary": "Deterministically review M05, which carries an unverified promotional claim.",
+    "execution_status": "NEEDS_REVIEW",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_677e7bb1a535449989563c46925b4b08",
+    "case_id": "manual_claim_review.review_claim.input",
+    "execution_mode": "live",
+    "timestamp": "2026-11-01T14:58:09.413438+00:00",
+    "model_name": "deepseek-flash",
+    "event_type": "model_final",
+    "step_index": 3,
+    "selected_action": "finish",
+    "execution_status": "MODEL_FINISHED",
+    "decision_reason_summary": "Model ended tool selection; business outcome is derived independently",
+    "next_action": "finish"
+  }
+]

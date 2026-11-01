@@ -1,0 +1,13 @@
+{
+  "request_id": "business-japan-localization",
+  "material_ids": [
+    "M04"
+  ],
+  "target_channel": "Instagram Reels",
+  "market": "JP",
+  "timezone": "Asia/Tokyo",
+  "requested_publish_time": "2027-01-15T18:00:00+09:00",
+  "hard_time_constraint": true,
+  "flexible_time_window": null,
+  "user_confirmations": []
+}

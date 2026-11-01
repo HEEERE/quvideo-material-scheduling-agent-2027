@@ -1,39 +1,41 @@
 # 实际评估记录
 
-本文件由 `scripts/build_report.py` 从原始评估 JSON 和 pytest 输出生成，未修改 Trace。最后一批真实验证：2026-11-01T14:26:48.343521+00:00 至 2026-11-01T14:28:25.168547+00:00。
+本文件由 `scripts/build_report.py` 从原始评估 JSON 和 pytest 输出生成，未修改 Trace。最后一批真实验证：2026-11-01T14:55:50.483791+00:00 至 2026-11-01T14:57:31.655670+00:00。
 
 ## 证据分层
 
 | 类型 | 实际结果 | 证据 |
 |---|---|---|
-| 确定性 pytest | 95 项通过，耗时 7.17 秒 | [原始输出](../examples/test-results.txt) |
-| DeepSeek 真实模型 | 6/6 个场景通过本批次断言 | [完整报告](../examples/evidence/live_20261101T142648Z_b223f7aa/evaluation.json) |
-| 离线脚本模拟 | 6/6 个场景通过 | [独立报告](../examples/evidence/mock_20261101T142651Z_2bd9c46b/evaluation.json) |
-| 审核发现的动态边界，真实模型 | 2/2 个场景通过 | [真实修复复验](../examples/evidence/review_live_20261101T142650Z_624f8ade/regressions.json) |
-| 审核发现的动态边界，离线 | 2/2 个场景通过 | [离线修复复验](../examples/evidence/review_mock_20261101T142700Z_6da16e38/regressions.json) |
+| 确定性 pytest | 114 项通过，耗时 15.15 秒 | [原始输出](../examples/test-results.txt) |
+| DeepSeek 真实模型 | 6/6 个场景通过本批次断言 | [完整报告](../examples/evidence/live_20261101T145550Z_831feb5a/evaluation.json) |
+| 离线脚本模拟 | 6/6 个场景通过 | [独立报告](../examples/evidence/mock_20261101T145551Z_d7b2838e/evaluation.json) |
+| 审核发现的动态边界，真实模型 | 2/2 个场景通过 | [真实修复复验](../examples/evidence/review_live_20261101T145545Z_4e957c40/regressions.json) |
+| 审核发现的动态边界，离线 | 2/2 个场景通过 | [离线修复复验](../examples/evidence/review_mock_20261101T145559Z_eb29467b/regressions.json) |
+| 模拟运营流程，真实模型 | 5/5 个场景通过 | [完整操作记录](../examples/evidence/business_live_20261101T145550Z_26cae819/business.json) |
+| 模拟运营流程，离线 | 5/5 个场景通过 | [独立对照](../examples/evidence/business_mock_20261101T145605Z_4bf2e16e/business.json) |
 
 这些是有限案例的实际结果，不代表总体成功率。live 由原生模型工具调用产生；mock 和测试替身不能证明模型自主决策。
 
-最终运行来源指纹：`da7047e2cf24911decd980632711d71f5efe0df98f83f81825b9105b81f6a2af`。每个 run 的首条 source_snapshot 记录 src 和 data 文件的 SHA-256。首次探索记录早于此功能加入，仍保留原样。
+最终运行来源指纹：`1ef21d598b33eb22e38ed1251ec8415c94caa57c3aecbbeff38dd15a769f6ee2`。每个 run 的首条 source_snapshot 记录 src 和 data 文件的 SHA-256。首次探索记录早于此功能加入，仍保留原样。
 
 ## 六场景逐项验收
 
 | 场景 | 实际输入 | 预期 | 实际输出 | 断言 | 原始简洁 Trace |
 |---|---|---|---|---|---|
-| normal | [examples/normal.input.json](../examples/normal.input.json) | PASS，原时间 READY | DRAFT_SAVED / SAVED / READY | 通过 | [Trace](../examples/evidence/live_20261101T142648Z_b223f7aa/run_6b9cef3f6ce14f02a95b9cf8138d440b/trace.json) |
-| missing | [examples/missing.input.json](../examples/missing.input.json) | 补查仍缺授权，不保存 | NEEDS_INFO / NOT_ATTEMPTED | 通过 | [Trace](../examples/evidence/live_20261101T142648Z_b223f7aa/run_493771367c8e48de96e3cbf8b9bf9310/trace.json) |
-| risk | [examples/risk.input.json](../examples/risk.input.json) | 明确禁止，BLOCKED | BLOCKED / NOT_ATTEMPTED | 通过 | [Trace](../examples/evidence/live_20261101T142648Z_b223f7aa/run_2eac810da04c49708e15f78f5f388f09/trace.json) |
-| conflict | [examples/conflict.input.json](../examples/conflict.input.json) | 主动另查，硬性替代 PENDING | DRAFT_SAVED / SAVED / AWAITING_CONFIRMATION | 通过 | [Trace](../examples/evidence/live_20261101T142648Z_b223f7aa/run_c1ed76dd39534e1f9d62fc5ddf29264e/trace.json) |
-| duplicate | [examples/duplicate.input.json](../examples/duplicate.input.json) | 跨进程同 ID，仅一行 | DRAFT_SAVED / ALREADY_EXISTS / READY | 通过 | [Trace](../examples/evidence/live_20261101T142648Z_b223f7aa/run_dba38799994b49da805bcd91802a2e03/trace.json) |
-| save_failure | [examples/save_failure.input.json](../examples/save_failure.input.json) | 回滚，明确未保存 | SAVE_FAILED / SAVE_FAILED | 通过 | [Trace](../examples/evidence/live_20261101T142648Z_b223f7aa/run_8d593ff81d2b4bc289f2d331da75e1af/trace.json) |
+| normal | [examples/normal.input.json](../examples/normal.input.json) | PASS，原时间 READY | DRAFT_SAVED / SAVED / READY | 通过 | [Trace](../examples/evidence/live_20261101T145550Z_831feb5a/run_22cf3539e0cc4e9db66fe2b090d5e35b/trace.json) |
+| missing | [examples/missing.input.json](../examples/missing.input.json) | 补查仍缺授权，不保存 | NEEDS_INFO / NOT_ATTEMPTED | 通过 | [Trace](../examples/evidence/live_20261101T145550Z_831feb5a/run_d408df326aaf40fdb202383f72ebe5f0/trace.json) |
+| risk | [examples/risk.input.json](../examples/risk.input.json) | 明确禁止，BLOCKED | BLOCKED / NOT_ATTEMPTED | 通过 | [Trace](../examples/evidence/live_20261101T145550Z_831feb5a/run_087313ccba164c9a903581551728d056/trace.json) |
+| conflict | [examples/conflict.input.json](../examples/conflict.input.json) | 主动另查，硬性替代 PENDING | DRAFT_SAVED / SAVED / AWAITING_CONFIRMATION | 通过 | [Trace](../examples/evidence/live_20261101T145550Z_831feb5a/run_9999cf875b134a4a8f22a70e8cdae1c2/trace.json) |
+| duplicate | [examples/duplicate.input.json](../examples/duplicate.input.json) | 跨进程同 ID，仅一行 | DRAFT_SAVED / ALREADY_EXISTS / READY | 通过 | [Trace](../examples/evidence/live_20261101T145550Z_831feb5a/run_b99f8363a7784b51873c27982e267233/trace.json) |
+| save_failure | [examples/save_failure.input.json](../examples/save_failure.input.json) | 回滚，明确未保存 | SAVE_FAILED / SAVE_FAILED | 通过 | [Trace](../examples/evidence/live_20261101T145550Z_831feb5a/run_d062da9df32c44e0972b3e96815b4f8e/trace.json) |
 
 每份 evaluation.json 记录输入路径、实际退出码、完整结果、持久化数据库快照、工具路径、Trace 链接；duplicate 包含两个独立进程的结果，第二次使用同一数据库。数据库文件作为运行缓存被 Git 忽略，快照和事务测试供复核。save_failure 的退出码 4 是明确失败处理的预期结果，COMPLETED 只表示场景已处理完，不表示成功保存。
 
 ## 两条实际动态路径
 
-正常路径：[Trace](../examples/evidence/live_20261101T142648Z_b223f7aa/run_6b9cef3f6ce14f02a95b9cf8138d440b/trace.json)，实际工具序列：`read_material → check_review_rules → query_schedule → save_schedule_draft`。
+正常路径：[Trace](../examples/evidence/live_20261101T145550Z_831feb5a/run_22cf3539e0cc4e9db66fe2b090d5e35b/trace.json)，实际工具序列：`read_material → check_review_rules → query_schedule → save_schedule_draft`。
 
-冲突路径：[Trace](../examples/evidence/live_20261101T142648Z_b223f7aa/run_c1ed76dd39534e1f9d62fc5ddf29264e/trace.json)，实际工具序列：`read_material → check_review_rules → query_schedule → query_schedule → save_schedule_draft`。同一个运行时和相同工具集合，工具观察导致后续查询动作发生变化。候选时间由模型选择，程序仅返回占用事实、用户窗口和间隔规则。
+冲突路径：[Trace](../examples/evidence/live_20261101T145550Z_831feb5a/run_9999cf875b134a4a8f22a70e8cdae1c2/trace.json)，实际工具序列：`read_material → check_review_rules → query_schedule → query_schedule → save_schedule_draft`。同一个运行时和相同工具集合，工具观察导致后续查询动作发生变化。候选时间由模型选择，程序仅返回占用事实、用户窗口和间隔规则。
 
 ## 真实发现与修复
 
@@ -41,14 +43,16 @@
 
 保存异常测试在 INSERT 后注入真实 SQLite 异常，验证 rollback。真实模型有自主重试的记录，所有失败都返回 SAVE_FAILED，没有伪成功或额外行。
 
-审核后新增待确认建议失效重排、同 ID 历史版本、并发重排、重排回滚、声明字段严格类型、确认请求输出和显式排期同步等回归测试。新增 25 项检查在修复前是 23 failed / 2 passed，失败输出见 [修复前记录](../examples/review-regressions-before.txt)；修复后与原有测试共同达到 95 项通过。真实复验分别检查“占用变化后同请求保留 ID 重排”和“无窗口硬性冲突输出待确认项”，详见 [修复说明](07-review-fixes.md)。
+审核后新增待确认建议失效重排、同 ID 历史版本、并发重排、重排回滚、声明字段严格类型、确认请求输出和显式排期同步等回归测试。新增 25 项检查在修复前是 23 failed / 2 passed，失败输出见 [修复前记录](../examples/review-regressions-before.txt)；修复后与原有测试共同达到 114 项通过。真实复验分别检查“占用变化后同请求保留 ID 重排”和“无窗口硬性冲突输出待确认项”，详见 [修复说明](07-review-fixes.md)。
+
+本轮同时核验工作区已有的状态一致性与评估路径更新：同请求的待确认建议互相避让，失效审核不能被历史保存成功覆盖，保存与证据错误明确输出。完整 114 项工程测试重新执行，见 [状态一致性说明](08-state-consistency-fixes.md)。运营模拟使用合成数据和模拟用户操作，Agent 动作来自真实 DeepSeek；确认记录仅为测试输入，详见 [业务模拟报告](09-business-simulation.md)。
 
 初次开发复核曾因切换沙箱身份无法访问既有临时目录而出现环境错误，实际记录见 [失败摘要](../examples/test-results-permission-error.txt)。使用项目内独立临时目录后复测通过；没有删除案例或放宽规则。
 
 本机实际复测命令：
 
 ```powershell
-.\.venv\Scripts\python -X utf8 -m pytest -q --basetemp runs/repair-green-tests-final3 -o cache_dir=runs/repair-green-cache-final3
+.\.venv\Scripts\python -X utf8 -m pytest -q --basetemp runs/business-verification-tests-20261101 -o cache_dir=runs/business-verification-cache-20261101
 ```
 
 一般环境直接使用 `python -m pytest -q`。GitHub Actions 已提供 Python 3.11/3.12、Ubuntu/Windows 的测试矩阵配置，远程工作流结果需以 GitHub 实际状态为准，本报告不声称未查看的工作流已通过。

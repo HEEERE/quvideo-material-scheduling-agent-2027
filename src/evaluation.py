@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 from .main import ROOT, run_case
 from .models import ScheduleRequest
 from .storage import DraftRepository
+from .tracing import evidence_path
 
 CASES = ["normal", "missing", "risk", "conflict", "duplicate", "save_failure"]
 
@@ -47,7 +48,7 @@ def main(argv=None):
     parser.add_argument("--output-dir", type=Path, default=ROOT / "examples" / "evidence")
     args = parser.parse_args(argv)
     load_dotenv(ROOT / ".env", override=False)
-    batch = args.output_dir / (args.mode + "_" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "_" + uuid.uuid4().hex[:8])
+    batch = args.output_dir.resolve() / (args.mode + "_" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "_" + uuid.uuid4().hex[:8])
     batch.mkdir(parents=True)
     start = datetime.now(timezone.utc)
     records = []
@@ -84,7 +85,7 @@ def main(argv=None):
             record = {"case_id": case, "passed": passed, "criterion": criterion, "input": str(input_path.relative_to(ROOT)),
                       "exit_code": completed.returncode, "result": result, "database_snapshot": drafts,
                       "tool_path": [e["tool_name"] for e in tools], "previous_result": previous,
-                      "trace": {k: str(Path(v).relative_to(ROOT)) for k, v in trace.items()}}
+                      "trace": {k: evidence_path(v) for k, v in trace.items()}}
         except (ValueError, OSError, subprocess.SubprocessError) as exc:
             record = {"case_id": case, "passed": False, "error_type": type(exc).__name__}
         records.append(record)

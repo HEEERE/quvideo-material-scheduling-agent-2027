@@ -1,0 +1,168 @@
+[
+  {
+    "run_id": "run_b4306e7b066343d49d0885f3a4ce7712",
+    "case_id": "confirmation_slot_changed.confirm.input",
+    "execution_mode": "mock",
+    "timestamp": "2026-11-01T14:56:11.798856+00:00",
+    "model_name": "offline-scripted-simulator",
+    "event_type": "tool_result",
+    "step_index": 1,
+    "selected_action": "read_material",
+    "tool_name": "read_material",
+    "tool_call_id": "mock_7dabf9a109da4c31bbc2da4059e88c6d",
+    "tool_arguments": {
+      "material_id": "M01",
+      "reason_summary": "Offline scripted validation: read_material"
+    },
+    "tool_response_summary": "{\"status\": \"OK\", \"material\": {\"material_id\": \"M01\", \"title\": \"AI Catch holiday transformation\", \"material_type\": \"template_promo\", \"content_theme\": \"holiday creativity\", \"target_product\": \"AI Catch\", \"target_market\": \"US\", \"language\": \"en\", \"target_channel\": \"TikTok\", \"copyright_status\": \"AUTHORIZED\", \"authorization_scope\": [\"TikTok:US\"], \"content_tags\": [\"holiday\"], \"review_metadata\": {\"has_promotional_claim\": true, \"claims_verified\": true, \"source\": \"synthetic_fixture\"}, \"missing_fields\": []}}",
+    "next_action": "check_review_rules",
+    "decision_reason_summary": "Offline scripted validation: read_material",
+    "execution_status": "OK",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_b4306e7b066343d49d0885f3a4ce7712",
+    "case_id": "confirmation_slot_changed.confirm.input",
+    "execution_mode": "mock",
+    "timestamp": "2026-11-01T14:56:11.804308+00:00",
+    "model_name": "offline-scripted-simulator",
+    "event_type": "tool_result",
+    "step_index": 2,
+    "selected_action": "check_review_rules",
+    "tool_name": "check_review_rules",
+    "tool_call_id": "mock_a2164355f75343d8aa468576a4f65d05",
+    "tool_arguments": {
+      "material_id": "M01",
+      "reason_summary": "Offline scripted validation: check_review_rules"
+    },
+    "tool_response_summary": "{\"material_id\": \"M01\", \"review_status\": \"PASS\", \"risk_level\": \"LOW\", \"risk_reasons\": [], \"matched_rules\": [], \"missing_fields\": [], \"requires_manual_review\": false}",
+    "next_action": "query_schedule",
+    "decision_reason_summary": "Offline scripted validation: check_review_rules",
+    "execution_status": "PASS",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_b4306e7b066343d49d0885f3a4ce7712",
+    "case_id": "confirmation_slot_changed.confirm.input",
+    "execution_mode": "mock",
+    "timestamp": "2026-11-01T14:56:11.816209+00:00",
+    "model_name": "offline-scripted-simulator",
+    "event_type": "tool_result",
+    "step_index": 3,
+    "selected_action": "query_schedule",
+    "tool_name": "query_schedule",
+    "tool_call_id": "mock_a4337cfbb18545cd840424b4b11a7e08",
+    "tool_arguments": {
+      "material_id": "M01",
+      "reason_summary": "Offline scripted validation: query_schedule",
+      "publish_time": "2027-01-15T18:00:00-05:00"
+    },
+    "tool_response_summary": "{\"available\": false, \"publish_time\": \"2027-01-15T18:00:00-05:00\", \"conflicts\": [{\"source\": \"formal\", \"id\": \"SYN-US-1800\", \"publish_time\": \"2027-01-15T23:00:00+00:00\"}], \"conflict_rule\": \"Same channel and market; start times less than 60 minutes apart conflict. READY drafts reserve globally; pending suggestions also conflict within this request, but do not reserve for other requests.\", \"search_window\": {\"start\": \"2027-01-15T18:00:00-05:00\", \"end\": \"2027-01-15T21:00:00-05:00\"}, \"query_horizon_days\": 7, \"minimum_spacing_minutes\": 60, \"checked_at\": \"2026-11-01T14:56:11.814677+00:00\", \"candidate_time_hints\": [{\"publish_time\": \"2027-01-15T19:00:00-05:00\", \"availability\": \"UNVERIFIED\", \"basis\": \"User-window endpoint, observed conflict spacing boundary, or explicit confirmation\"}, {\"publish_time\": \"2027-01-15T21:00:00-05:00\", \"availability\": \"UNVERIFIED\", \"basis\": \"User-window endpoint, observed conflict spacing boundary, or explicit confirmation\"}], \"hint\": \"Exact minimum-spacing boundaries are legal. Candidate hints have NOT been checked for availability: choose and query them yourself. No alternative is implicitly approved.\"}",
+    "next_action": "query_schedule",
+    "decision_reason_summary": "Offline scripted validation: query_schedule",
+    "execution_status": "OK",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_b4306e7b066343d49d0885f3a4ce7712",
+    "case_id": "confirmation_slot_changed.confirm.input",
+    "execution_mode": "mock",
+    "timestamp": "2026-11-01T14:56:11.831056+00:00",
+    "model_name": "offline-scripted-simulator",
+    "event_type": "tool_result",
+    "step_index": 4,
+    "selected_action": "query_schedule",
+    "tool_name": "query_schedule",
+    "tool_call_id": "mock_506b01f90cf64043867f9a34f38e8b45",
+    "tool_arguments": {
+      "material_id": "M01",
+      "reason_summary": "Offline scripted validation: query_schedule",
+      "publish_time": "2027-01-15T19:00:00-05:00"
+    },
+    "tool_response_summary": "{\"available\": false, \"publish_time\": \"2027-01-15T19:00:00-05:00\", \"conflicts\": [{\"source\": \"formal\", \"id\": \"BUSINESS-CONFIRMATION-RACE\", \"publish_time\": \"2027-01-16T00:00:00+00:00\"}], \"conflict_rule\": \"Same channel and market; start times less than 60 minutes apart conflict. READY drafts reserve globally; pending suggestions also conflict within this request, but do not reserve for other requests.\", \"search_window\": {\"start\": \"2027-01-15T18:00:00-05:00\", \"end\": \"2027-01-15T21:00:00-05:00\"}, \"query_horizon_days\": 7, \"minimum_spacing_minutes\": 60, \"checked_at\": \"2026-11-01T14:56:11.829492+00:00\", \"candidate_time_hints\": [{\"publish_time\": \"2027-01-15T18:00:00-05:00\", \"availability\": \"UNVERIFIED\", \"basis\": \"User-window endpoint, observed conflict spacing boundary, or explicit confirmation\"}, {\"publish_time\": \"2027-01-15T20:00:00-05:00\", \"availability\": \"UNVERIFIED\", \"basis\": \"User-window endpoint, observed conflict spacing boundary, or explicit confirmation\"}, {\"publish_time\": \"2027-01-15T21:00:00-05:00\", \"availability\": \"UNVERIFIED\", \"basis\": \"User-window endpoint, observed conflict spacing boundary, or explicit confirmation\"}], \"hint\": \"Exact minimum-spacing boundaries are legal. Can",
+    "next_action": "query_schedule",
+    "decision_reason_summary": "Offline scripted validation: query_schedule",
+    "execution_status": "OK",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_b4306e7b066343d49d0885f3a4ce7712",
+    "case_id": "confirmation_slot_changed.confirm.input",
+    "execution_mode": "mock",
+    "timestamp": "2026-11-01T14:56:11.844610+00:00",
+    "model_name": "offline-scripted-simulator",
+    "event_type": "tool_result",
+    "step_index": 5,
+    "selected_action": "query_schedule",
+    "tool_name": "query_schedule",
+    "tool_call_id": "mock_fdc73f6cd4cb45c8b4b9931d000aff8e",
+    "tool_arguments": {
+      "material_id": "M01",
+      "reason_summary": "Offline scripted validation: query_schedule",
+      "publish_time": "2027-01-15T20:00:00-05:00"
+    },
+    "tool_response_summary": "{\"available\": false, \"publish_time\": \"2027-01-15T20:00:00-05:00\", \"conflicts\": [{\"source\": \"formal\", \"id\": \"SYN-US-2000\", \"publish_time\": \"2027-01-16T01:00:00+00:00\"}], \"conflict_rule\": \"Same channel and market; start times less than 60 minutes apart conflict. READY drafts reserve globally; pending suggestions also conflict within this request, but do not reserve for other requests.\", \"search_window\": {\"start\": \"2027-01-15T18:00:00-05:00\", \"end\": \"2027-01-15T21:00:00-05:00\"}, \"query_horizon_days\": 7, \"minimum_spacing_minutes\": 60, \"checked_at\": \"2026-11-01T14:56:11.841643+00:00\", \"candidate_time_hints\": [{\"publish_time\": \"2027-01-15T18:00:00-05:00\", \"availability\": \"UNVERIFIED\", \"basis\": \"User-window endpoint, observed conflict spacing boundary, or explicit confirmation\"}, {\"publish_time\": \"2027-01-15T19:00:00-05:00\", \"availability\": \"UNVERIFIED\", \"basis\": \"User-window endpoint, observed conflict spacing boundary, or explicit confirmation\"}, {\"publish_time\": \"2027-01-15T21:00:00-05:00\", \"availability\": \"UNVERIFIED\", \"basis\": \"User-window endpoint, observed conflict spacing boundary, or explicit confirmation\"}], \"hint\": \"Exact minimum-spacing boundaries are legal. Candidate hints ha",
+    "next_action": "query_schedule",
+    "decision_reason_summary": "Offline scripted validation: query_schedule",
+    "execution_status": "OK",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_b4306e7b066343d49d0885f3a4ce7712",
+    "case_id": "confirmation_slot_changed.confirm.input",
+    "execution_mode": "mock",
+    "timestamp": "2026-11-01T14:56:11.857793+00:00",
+    "model_name": "offline-scripted-simulator",
+    "event_type": "tool_result",
+    "step_index": 6,
+    "selected_action": "query_schedule",
+    "tool_name": "query_schedule",
+    "tool_call_id": "mock_dbbb1f7f49ed4254aba8eddf203f03d3",
+    "tool_arguments": {
+      "material_id": "M01",
+      "reason_summary": "Offline scripted validation: query_schedule",
+      "publish_time": "2027-01-15T21:00:00-05:00"
+    },
+    "tool_response_summary": "{\"available\": true, \"publish_time\": \"2027-01-15T21:00:00-05:00\", \"conflicts\": [], \"conflict_rule\": \"Same channel and market; start times less than 60 minutes apart conflict. READY drafts reserve globally; pending suggestions also conflict within this request, but do not reserve for other requests.\", \"search_window\": {\"start\": \"2027-01-15T18:00:00-05:00\", \"end\": \"2027-01-15T21:00:00-05:00\"}, \"query_horizon_days\": 7, \"minimum_spacing_minutes\": 60, \"checked_at\": \"2026-11-01T14:56:11.854476+00:00\", \"candidate_time_hints\": [{\"publish_time\": \"2027-01-15T19:00:00-05:00\", \"availability\": \"UNVERIFIED\", \"basis\": \"User-window endpoint, observed conflict spacing boundary, or explicit confirmation\"}], \"hint\": \"Exact minimum-spacing boundaries are legal. Candidate hints have NOT been checked for availability: choose and query them yourself. No alternative is implicitly approved.\"}",
+    "next_action": "save_schedule_draft",
+    "decision_reason_summary": "Offline scripted validation: query_schedule",
+    "execution_status": "OK",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_b4306e7b066343d49d0885f3a4ce7712",
+    "case_id": "confirmation_slot_changed.confirm.input",
+    "execution_mode": "mock",
+    "timestamp": "2026-11-01T14:56:11.883435+00:00",
+    "model_name": "offline-scripted-simulator",
+    "event_type": "tool_result",
+    "step_index": 7,
+    "selected_action": "save_schedule_draft",
+    "tool_name": "save_schedule_draft",
+    "tool_call_id": "mock_a6ff9ad60530427a9c07376715b68ea7",
+    "tool_arguments": {
+      "material_id": "M01",
+      "reason_summary": "Offline scripted validation: save_schedule_draft",
+      "suggested_publish_time": "2027-01-15T21:00:00-05:00",
+      "confirmation_status": "PENDING"
+    },
+    "tool_response_summary": "{\"status\": \"SAVED\", \"action\": \"CREATED\", \"draft_id\": \"draft_b36c44c3d40d4652be68754a349423a2\", \"draft\": {\"draft_id\": \"draft_b36c44c3d40d4652be68754a349423a2\", \"request_fingerprint\": \"df6e48feedd0af0428facc9b1cb8dcf2c2b8b00ee1bf8b303982de091cd31bbb\", \"material_id\": \"M01\", \"original_publish_time\": \"2027-01-15T18:00:00-05:00\", \"suggested_publish_time\": \"2027-01-15T21:00:00-05:00\", \"target_channel\": \"TikTok\", \"market\": \"US\", \"timezone\": \"America/New_York\", \"confirmation_status\": \"PENDING\", \"review_status\": \"PASS\", \"draft_status\": \"AWAITING_CONFIRMATION\", \"risk_reasons\": [], \"confirmation_evidence\": [], \"created_at\": \"2026-11-01T14:56:11.870344Z\", \"updated_at\": \"2026-11-01T14:56:11.870344Z\", \"revision\": 1}, \"schedule_check\": {\"available\": true, \"publish_time\": \"2027-01-15T21:00:00-05:00\", \"conflicts\": [], \"conflict_rule\": \"Same channel and market; start times less than 60 minutes apart conflict. READY drafts reserve globally; pending suggestions also conflict within this request, but do not reserve for other requests.\", \"search_window\": {\"start\": \"2027-01-15T18:00:00-05:00\", \"end\": \"2027-01-15T21:00:00-05:00\"}, \"query_horizon_days\": 7, \"minimum_spacing_minutes\": 60, \"checked_at\": \"2026-",
+    "next_action": "finish",
+    "decision_reason_summary": "Offline scripted validation: save_schedule_draft",
+    "execution_status": "SAVED",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_b4306e7b066343d49d0885f3a4ce7712",
+    "case_id": "confirmation_slot_changed.confirm.input",
+    "execution_mode": "mock",
+    "timestamp": "2026-11-01T14:56:11.889680+00:00",
+    "model_name": "offline-scripted-simulator",
+    "event_type": "model_final",
+    "step_index": 8,
+    "selected_action": "finish",
+    "execution_status": "MODEL_FINISHED",
+    "decision_reason_summary": "Model ended tool selection; business outcome is derived independently",
+    "next_action": "finish"
+  }
+]

@@ -1,7 +1,7 @@
 {
-  "recorded_at_utc": "2026-11-01T14:26:23.386909+00:00",
-  "command": ".\\.venv\\Scripts\\python -X utf8 -m pytest -q --basetemp runs/repair-green-tests-final3 -o cache_dir=runs/repair-green-cache-final3",
+  "recorded_at_utc": "2026-11-01T14:57:24.956747+00:00",
+  "command": ".\\.venv\\Scripts\\python -X utf8 -m pytest -q --basetemp runs/business-verification-tests-20261101 -o cache_dir=runs/business-verification-cache-20261101",
   "result_file": "examples/test-results.txt",
-  "passed": 95,
-  "measured_seconds": 7.17
+  "passed": 114,
+  "measured_seconds": 15.15
 }

@@ -5,6 +5,7 @@ import json
 import re
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -33,11 +34,25 @@ def latest_regressions(mode):
     return path, data
 
 
+def latest_business(mode):
+    candidates = []
+    for path in (ROOT / "examples/evidence").glob("business_*/business.json"):
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if data["execution_mode"] == mode and data["total"] == 5:
+            candidates.append((data["started_at"], path, data))
+    _, path, data = max(candidates)
+    return path, data
+
+
 def main():
     live_path, live = latest("live")
     mock_path, mock = latest("mock")
     review_path, review = latest_regressions("live")
     mock_review_path, mock_review = latest_regressions("mock")
+    business_path, business = latest_business("live")
+    mock_business_path, mock_business = latest_business("mock")
+    business_link = business_path.relative_to(ROOT).as_posix()
+    mock_business_link = mock_business_path.relative_to(ROOT).as_posix()
     review_link = review_path.relative_to(ROOT).as_posix()
     mock_review_link = mock_review_path.relative_to(ROOT).as_posix()
     test_session = json.loads((ROOT / "examples/test-session.json").read_text(encoding="utf-8"))
@@ -73,6 +88,8 @@ def main():
 | 离线脚本模拟 | {mock['passed']}/{mock['total']} 个场景通过 | [独立报告](../{relative_mock}) |
 | 审核发现的动态边界，真实模型 | {review['passed']}/{review['total']} 个场景通过 | [真实修复复验](../{review_link}) |
 | 审核发现的动态边界，离线 | {mock_review['passed']}/{mock_review['total']} 个场景通过 | [离线修复复验](../{mock_review_link}) |
+| 模拟运营流程，真实模型 | {business['passed']}/{business['total']} 个场景通过 | [完整操作记录](../{business_link}) |
+| 模拟运营流程，离线 | {mock_business['passed']}/{mock_business['total']} 个场景通过 | [独立对照](../{mock_business_link}) |
 
 这些是有限案例的实际结果，不代表总体成功率。live 由原生模型工具调用产生；mock 和测试替身不能证明模型自主决策。
 
@@ -100,6 +117,8 @@ def main():
 
 审核后新增待确认建议失效重排、同 ID 历史版本、并发重排、重排回滚、声明字段严格类型、确认请求输出和显式排期同步等回归测试。新增 25 项检查在修复前是 23 failed / 2 passed，失败输出见 [修复前记录](../examples/review-regressions-before.txt)；修复后与原有测试共同达到 {match[1]} 项通过。真实复验分别检查“占用变化后同请求保留 ID 重排”和“无窗口硬性冲突输出待确认项”，详见 [修复说明](07-review-fixes.md)。
 
+本轮同时核验工作区已有的状态一致性与评估路径更新：同请求的待确认建议互相避让，失效审核不能被历史保存成功覆盖，保存与证据错误明确输出。完整 {match[1]} 项工程测试重新执行，见 [状态一致性说明](08-state-consistency-fixes.md)。运营模拟使用合成数据和模拟用户操作，Agent 动作来自真实 DeepSeek；确认记录仅为测试输入，详见 [业务模拟报告](09-business-simulation.md)。
+
 初次开发复核曾因切换沙箱身份无法访问既有临时目录而出现环境错误，实际记录见 [失败摘要](../examples/test-results-permission-error.txt)。使用项目内独立临时目录后复测通过；没有删除案例或放宽规则。
 
 本机实际复测命令：
@@ -123,6 +142,8 @@ def main():
 
 ## 评审快速入口
 
+当前状态一致性更新已用本轮真实模型和离线两类记录复验，覆盖同批建议冲突、当前审核状态、保存错误与评估目录解析。另增加模拟运营人员确认、确认后占用变化、多素材及本地化操作，见 [状态一致性修复](docs/08-state-consistency-fixes.md) 和 [业务模拟报告](docs/09-business-simulation.md)。
+
 | 交付项 | 可核查结果 |
 |---|---|
 | 工程测试 | [{match[1]} passed](examples/test-results.txt) |
@@ -133,6 +154,7 @@ def main():
 | 真实错误与恢复 | [模型错误确认状态被 Guard 拒绝并改正](examples/evidence/live_20261101T133154Z_18c0964f/evaluation.json) |
 | 逐项验收与限制 | [评估矩阵](docs/03-evaluation.md) |
 | 本次审核问题修复 | [真实模型 {review['passed']}/{review['total']}]({review_link})、[修复说明](docs/07-review-fixes.md) |
+| 模拟运营流程 | [真实模型 {business['passed']}/{business['total']}]({business_link})、[离线对照]({mock_business_link}) |
 
 ## 安装
 
@@ -182,6 +204,8 @@ python -m src.evaluation --mode mock
 python -m src.evaluation --mode live
 python -m src.review_evaluation --mode mock
 python -m src.review_evaluation --mode live
+python scripts/business_simulation.py --mode mock
+python scripts/business_simulation.py --mode live
 ```
 
 评估器为每个案例建立独立数据库，避免跨案例占位；duplicate 在两个独立 Python 进程中复用数据库。每次生成新的批次目录，不覆盖旧事件。保存异常案例会显式注入提交前故障。单独体验该案例：
@@ -206,7 +230,9 @@ python -m src.main --sync-schedules data/schedules.json --db runs/drafts.db
 
 CLI 输出 JSON 包括审核证据、原时间、建议时间、待确认项、schedule_blockers、当前 schedule_check、真实保存结果、执行状态、实际 token usage 和 Trace 文件路径。缺少授权调整窗口的冲突返回 NEEDS_CONFIRMATION，并列出所需输入。每次运行有 UUID run_id，生成 `events.jsonl`、`trace.json`、`result.json`；最终批次还记录代码与数据哈希。
 
-审核状态为 PASS / NEEDS_INFO / NEEDS_REVIEW / BLOCKED。保存工具为 SAVED / ALREADY_EXISTS / SAVE_FAILED / REJECTED_BY_POLICY。草稿 READY 与 AWAITING_CONFIRMATION 均未发布；硬性时间的替代必须待用户确认。相同渠道市场、开始时间相距严格小于 60 分钟发生冲突；待确认建议不占位，READY 草稿占位。
+审核状态为 PASS / NEEDS_INFO / NEEDS_REVIEW / BLOCKED。保存工具为 SAVED / ALREADY_EXISTS / SAVE_FAILED / REJECTED_BY_POLICY。草稿 READY 与 AWAITING_CONFIRMATION 均未发布；硬性时间的替代必须待用户确认。相同渠道市场、开始时间相距严格小于 60 分钟发生冲突；READY 草稿占位，待确认建议不占用其他请求的时段，但同一请求内的建议必须互不冲突。
+
+最终结果区分当前审核结论与最近一次保存结果：素材变化、缺失或审核异常后，不再沿用先前的 DRAFT_SAVED 推荐。历史草稿仍保留在数据库；save_error 给出保存拒绝或失败原因，review_error 给出证据读取或审核异常，恢复后需重新审核再重试。
 
 COMPLETED 表示所有素材得到明确处理结果，可能包含阻断或保存失败。退出码：0 已处理、2 配置或运行失败、3 未完成或预算耗尽、4 保存失败。`--max-steps`、`--max-tool-calls`、`--timeout` 可限制执行；工具非法参数也计入预算。
 
@@ -219,18 +245,73 @@ COMPLETED 表示所有素材得到明确处理结果，可能包含阻断或保�
 - `guard.py`、`scheduler.py`、`storage.py`：确认边界、冲突校验与 SQLite 事务幂等。
 - `tracing.py`、`evaluation.py`：观测、脱敏、来源快照和实际验收。
 - [需求分析](docs/01-requirements.md)、[技术方案](docs/02-solution.md)、[评估报告](docs/03-evaluation.md)、[AI 使用记录](docs/04-ai-usage.md)、[真实复盘](docs/05-retrospective.md)。
-- [初次开发时间记录](docs/development-record.json)、[最新证据索引](docs/latest-evidence.json)、[GitHub 交付说明](docs/06-delivery.md)、[审核修复说明](docs/07-review-fixes.md)。
+- [初次开发时间记录](docs/development-record.json)、[最新证据索引](docs/latest-evidence.json)、[GitHub 交付说明](docs/06-delivery.md)、[审核修复说明](docs/07-review-fixes.md)、[状态一致性修复](docs/08-state-consistency-fixes.md)、[业务模拟报告](docs/09-business-simulation.md)。
 
 限制：当前是单机、合成元数据审核；没有视觉审核、真实许可查询、用户身份认证或生产发布。真实样本数量有限，案例通过不代表生产可靠性。CI 配置随仓库提供，实际远程执行状态以 GitHub 为准。
 
 本地交付核查：`python scripts/verify_delivery.py`，扫描已暂存或跟踪文件的凭据及证据完整性。密钥、本地数据库、虚拟环境、缓存和运行目录都被 `.gitignore` 排除。
 """
     (ROOT / "README.md").write_text(readme, encoding="utf-8")
+    labels = {"confirmation_lifecycle": "待确认 → 显式确认 → 重复提交", "confirmation_slot_changed": "确认后时段被占用",
+              "batch_pending": "同请求两素材建议避让", "japan_localization": "日本市场与东京时区", "manual_claim_review": "未核实声明转人工"}
+    business_rows = []
+    for case in business["cases"]:
+        link = portable(case["traces"][-1]["trace"]) if case.get("traces") else business_link
+        business_rows.append(f"| {labels[case['case_id']]} | {'通过' if case['passed'] else '失败'} | [实际 Trace](../{link}) |")
+    local_start = datetime.fromisoformat(business["started_at"]).astimezone(ZoneInfo("Asia/Taipei")).isoformat()
+    local_end = datetime.fromisoformat(business["finished_at"]).astimezone(ZoneInfo("Asia/Taipei")).isoformat()
+    business_document = f"""# 模拟运营流程与真实模型测试
+
+本轮测试在当前状态一致性更新上实际执行。素材和用户操作是合成测试输入；live 中的工具选择由真实 DeepSeek deepseek-flash 产生，SQLite 查询、同步、提交和回滚都真实执行。没有调用真实内容发布接口，也没有把模拟确认当作真实运营批准。
+
+模拟运营批次时间（Asia/Taipei）：{local_start} 至 {local_end}。
+
+| 验证层次 | 真实模型结果 | 离线对照 |
+|---|---|---|
+| 六项强制场景 | [{live['passed']}/{live['total']}](../{relative_live}) | [{mock['passed']}/{mock['total']}](../{relative_mock}) |
+| 审核动态边界 | [{review['passed']}/{review['total']}](../{review_link}) | [{mock_review['passed']}/{mock_review['total']}](../{mock_review_link}) |
+| 模拟运营链路 | [{business['passed']}/{business['total']}](../{business_link}) | [{mock_business['passed']}/{mock_business['total']}](../{mock_business_link}) |
+| 确定性工程测试 | {match[1]} 项通过，{match[2]} 秒 | [原始结果](../examples/test-results.txt) |
+
+这是有限场景的实际断言结果，不是总体成功率。六项场景覆盖正常、授权缺失、版权阻断、冲突、跨进程重复提交与保存失败；后者使用明确标注的真实事务提交前故障注入。审核证据源异常、缓存失效与并发竞争由受控工程测试验证，不声称接入了真实外部素材系统。
+
+## 五个模拟运营场景
+
+| 操作 | 本批实际断言 | 证据 |
+|---|---|---|
+{chr(10).join(business_rows)}
+
+确认链路先产生 PENDING 建议，再由模拟测试操作员在原始输入中填写精确 user_confirmations，模型据此保存 USER_CONFIRMED / READY 草稿。批准后重复提交相同输入，须返回该批准草稿的同一 ID。原待确认请求与新增确认输入的指纹不同，因此会保留两条不同请求状态的记录；重复批准输入不能增加第三条。
+
+确认后占用变化的场景先构造模拟确认输入，再显式同步一条占用该时间的正式排期。断言数据库不存在该时间的 READY 草稿；模型只能提出另一个 PENDING 建议或明确请求进一步确认，不能把原确认移用到新时间。
+
+批量场景在同一请求中处理 M01 和可补查授权的 M07，两者的待确认建议必须至少相隔 60 分钟，并保持未批准。日本场景核对 JP、日语素材、Instagram Reels 和 Asia/Tokyo；声明场景要求人工复核且零草稿。
+
+每个案例都保存实际输入、各阶段退出码和最终 JSON、必要原始事件、简洁 Trace 及 SQLite 快照。确认及重复提交在独立 Python 进程中执行，共享该案例数据库，不依赖模型记忆。不同案例使用独立数据库以避免相互占位。Agent 预算在这些运营场景中显式设置为 32 步、48 次工具调用，以支持多素材处理。
+
+## 测试脚本首次误判
+
+首次离线运营批次为 4/5：[原始报告](../examples/evidence/business_mock_20261101T145433Z_667f161e/business.json)。确认已真实保存，重复提交也复用了 ID；失败来自脚本把等价的 UTC `Z` 与 `+00:00` 按字符串比较。随后改为用 UserConfirmation 校验并比较相同时间值，material_id、目标时间、确认时间和来源仍全部要求一致。没有放宽审批规则，也没有改写失败报告。
+
+## 复现命令
+
+```powershell
+python -m src.evaluation --mode live
+python -m src.review_evaluation --mode live
+python scripts/business_simulation.py --mode live
+python scripts/business_simulation.py --mode mock
+python -m pytest -q
+```
+
+工程测试的本机实际命令见 [test-session.json](../examples/test-session.json)。最新运行时来源指纹为 `{snapshot}`，交付检查同时核对真实与离线批次的每个来源快照；历史记录保留为对应版本证据。用户要求上传的状态一致性与路径更新已一并复验，见 [修复说明](08-state-consistency-fixes.md)。
+"""
+    (ROOT / "docs/09-business-simulation.md").write_text(business_document, encoding="utf-8")
     metadata = {"report_generated_at_utc": datetime.now(timezone.utc).isoformat(),
                 "client_timezone": "Asia/Taipei",
                 "pytest_passed": int(match[1]), "pytest_measured_seconds": float(match[2]),
                 "latest_live_report": relative_live, "latest_mock_report": relative_mock,
-                "source_fingerprint": snapshot, "review_live_report": review_link, "review_mock_report": mock_review_link}
+                "source_fingerprint": snapshot, "review_live_report": review_link, "review_mock_report": mock_review_link,
+                "business_live_report": business_link, "business_mock_report": mock_business_link}
     (ROOT / "docs/latest-evidence.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     print(json.dumps(metadata, indent=2))
 

@@ -1,0 +1,22 @@
+{
+  "run_id": "run_db034216c1c54a06b5ed3e0ebbdcfd66",
+  "execution_mode": "maintenance",
+  "execution_status": "COMPLETED",
+  "decision_steps": 0,
+  "tool_calls": 0,
+  "schedule_sync": {
+    "status": "SYNCHRONIZED",
+    "records": 1,
+    "inserted": 1,
+    "updated": 0,
+    "unchanged": 0,
+    "omitted_ids": "retained; cancel explicitly with status=CANCELLED"
+  },
+  "outcomes": [],
+  "errors": [],
+  "trace_files": {
+    "events": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\business_live_20261101T145550Z_26cae819\\run_db034216c1c54a06b5ed3e0ebbdcfd66\\events.jsonl",
+    "trace": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\business_live_20261101T145550Z_26cae819\\run_db034216c1c54a06b5ed3e0ebbdcfd66\\trace.json",
+    "result": "D:\\练习\\素材审核与发布排期 Agent\\examples\\evidence\\business_live_20261101T145550Z_26cae819\\run_db034216c1c54a06b5ed3e0ebbdcfd66\\result.json"
+  }
+}

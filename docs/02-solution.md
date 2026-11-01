@@ -25,6 +25,8 @@ flowchart TD
 
 时段查询会根据本次实际冲突的开始时间、配置的最小间距和用户窗口端点，计算 `candidate_time_hints`。所有提示明确标为 UNVERIFIED，不代表空闲或批准。模型仍须自行选择、查询并观察后才能保存；候选不是硬编码时间，也不会自动触发下一次查询。这用于避免模型只尝试五分钟偏移而漏掉恰好满足最小间距的边界。
 
+READY 草稿对同渠道市场的所有请求占位。AWAITING_CONFIRMATION 草稿仅在同一 request_fingerprint 内参与其他素材的冲突检查，防止一批建议互相重叠；它们不对独立请求占位。查询与保存事务使用相同规则，并发保存同批互相冲突的建议时仅允许一项成功。
+
 `reason_summary` 是动作的简短公开目的，不请求私有推理链。适配器不读取或保留 `reasoning_content` 等隐藏推理字段。实际 DeepSeek 运行显式使用 `thinking.type=disabled`，通过 `LLM_EXTRA_BODY` 配置；额外配置禁止覆盖消息、模型和工具等关键字段。
 
 协议参考实际打开的 [OpenAI Function Calling](https://developers.openai.com/api/docs/guides/function-calling)、[DeepSeek Tool Calls](https://api-docs.deepseek.com/guides/tool_calls/) 和 [DeepSeek Chat Completions](https://api-docs.deepseek.com/api/create-chat-completion/)。本项目适配 Chat Completions；仅支持其他接口的模型不能直接替换使用。
@@ -60,6 +62,10 @@ flowchart TD
 修复后的幂等分支同样在事务内查询已有草稿的实际时间并执行 Guard。仍有效时 ALREADY_EXISTS，维持原内容；失效的 AWAITING_CONFIRMATION 建议可在模型查询新的合法目标后，UPDATE 同一行，返回 SAVED / action=REPLANNED。原 ID、原要求和 created_at 保留，revision 增加，旧内容写入 draft_revisions。已批准草稿失效时返回 REJECTED_BY_POLICY / EXISTING_DRAFT_INVALID，由用户明确处理，不静默修改其批准含义。新目标仍校验查询证据、时间窗口及确认状态。事务失败回滚更新和历史插入。
 
 最终结果生成时还会读取当前记录并查询该时间，输出 schedule_check。若提交后状态已变化，则明确给出 NEEDS_CONFIRMATION、冲突及待办，不继续把失效时间放入 suggested_publish_time。校验结果是 checked_at 时刻的快照，不承诺未来永远不变。
+
+当前审核证据同样影响最终结果：重新读取的素材发生变化后必须重新审核；读取返回 NOT_FOUND 会清除旧素材和审核缓存，后续恢复时清除 NOT_FOUND 标记。读取、补查或审核失败后清除旧审核结论，输出 review_error 和待办，不能复用旧 PASS。即便历史保存成功，当前缺失、风险或未完成审核也不能输出 DRAFT_SAVED 或建议时段。已有数据库记录保留为历史事实，不因缓存失效而删除。
+
+save_status 表示最近一次保存调用的结果，保存前置检查失败也会更新该结果。save_error 保留结构化 code 和 message，包含实际存储错误码；因此后来发生的拒绝或异常不会被更早的成功结果覆盖。恢复证据源并完成读取、审核及保存重试后，仍由现有事务和唯一约束保证幂等。
 
 `--simulate-save-failure` 在真实 INSERT 后、COMMIT 前抛出 SQLite 异常并回滚；这是明确的故障注入，不伪造持久化结果。最终输出还会再次读取已提交记录验证 ID；访问失败返回 INCOMPLETE 和验证错误，不能宣称已验证保存成功。
 

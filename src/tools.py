@@ -51,6 +51,7 @@ class ToolRegistry:
         self.simulate_save_failure = simulate_save_failure
         self.loaded: dict[str, Material] = {}
         self.reviews = {}
+        self.review_errors: dict[str, dict] = {}
         self.queried: dict[str, set[str]] = {}
         self.schedule_observations: dict[str, dict[str, dict]] = {}
         self.save_results: dict[str, dict] = {}
@@ -66,18 +67,31 @@ class ToolRegistry:
         mid = args.material_id
         if mid not in self.request.material_ids:
             return {"status": "REJECTED_BY_POLICY", "error": "MATERIAL_OUTSIDE_REQUEST"}
+
+        def respond(result: dict) -> dict:
+            # Record every attempted save, including precondition failures, so a
+            # previous successful call cannot conceal a later rejection/error.
+            if name == "save_schedule_draft":
+                self.save_results[mid] = result
+            return result
+
+        checking_evidence = name in {"read_material", "lookup_material_info", "check_review_rules"}
         try:
             if name == "read_material":
                 material = self.materials.read(mid)
                 if not material:
+                    self.loaded.pop(mid, None)
+                    self.reviews.pop(mid, None)
+                    self.review_errors.pop(mid, None)
                     self.not_found.add(mid)
                     return {"status": "NOT_FOUND", "material_id": mid}
+                self.not_found.discard(mid)
                 if mid not in self.loaded or self.loaded[mid].model_dump() != material.model_dump():
                     self.reviews.pop(mid, None)
                 self.loaded[mid] = material
                 return {"status": "OK", "material": material.model_dump(mode="json")}
             if mid not in self.loaded:
-                return {"status": "REJECTED_BY_POLICY", "error": "READ_MATERIAL_FIRST"}
+                return respond({"status": "REJECTED_BY_POLICY", "error": "READ_MATERIAL_FIRST"})
             if name == "lookup_material_info":
                 updated, record = self.materials.lookup(self.loaded[mid])
                 if updated.model_dump() != self.loaded[mid].model_dump():
@@ -87,6 +101,7 @@ class ToolRegistry:
             if name == "check_review_rules":
                 review = self.reviewer.check(self.loaded[mid], self.request)
                 self.reviews[mid] = review
+                self.review_errors.pop(mid, None)
                 return review.model_dump(mode="json")
             if name == "query_schedule":
                 result = self.repository.query(self.scheduler, self.request, mid, args.publish_time)
@@ -95,23 +110,33 @@ class ToolRegistry:
                 return result
             if name == "save_schedule_draft":
                 if mid not in self.reviews:
-                    return {"status": "REJECTED_BY_POLICY", "draft_id": None, "error": "CHECK_REVIEW_RULES_FIRST"}
+                    return respond({"status": "REJECTED_BY_POLICY", "draft_id": None, "error": "CHECK_REVIEW_RULES_FIRST"})
                 # Re-evaluate authoritative data; never accept model-supplied review fields.
+                checking_evidence = True
                 review = self.reviewer.check(self.loaded[mid], self.request)
                 self.reviews[mid] = review
+                self.review_errors.pop(mid, None)
+                checking_evidence = False
                 if review.review_status != "PASS":
-                    return {"status": "REJECTED_BY_POLICY", "draft_id": None, "error": "REVIEW_NOT_PASS"}
+                    return respond({"status": "REJECTED_BY_POLICY", "draft_id": None, "error": "REVIEW_NOT_PASS"})
                 proposal = DraftProposal(material_id=mid, suggested_publish_time=args.suggested_publish_time,
                                          confirmation_status=args.confirmation_status)
                 result = self.repository.save(self.request, proposal, review, self.queried.get(mid, set()),
                                               self.guard, self.scheduler, self.simulate_save_failure)
-                self.save_results[mid] = result
-                return result
+                return respond(result)
         except ValueError as exc:
-            return {"status": "INVALID_ARGUMENTS", "error": str(exc)}
+            failure = {"status": "INVALID_ARGUMENTS", "error": str(exc)}
         except Exception as exc:
-            return {"status": "TOOL_ERROR", "error": type(exc).__name__}
-        return {"status": "TOOL_ERROR", "error": "Unreachable dispatch"}
+            failure = {"status": "TOOL_ERROR", "error": type(exc).__name__}
+        else:
+            return respond({"status": "TOOL_ERROR", "error": "Unreachable dispatch"})
+        if checking_evidence:
+            self.reviews.pop(mid, None)
+            self.review_errors[mid] = {"tool_name": name, **failure}
+            if name == "read_material":
+                self.loaded.pop(mid, None)
+                self.not_found.discard(mid)
+        return respond(failure)
 
     def _schedule_blockers(self, mid: str, saved: dict, current_slot: dict | None) -> list[dict]:
         if current_slot and not current_slot["available"]:
@@ -144,6 +169,7 @@ class ToolRegistry:
         outcomes = []
         for mid in self.request.material_ids:
             review = self.reviews.get(mid)
+            review_error = self.review_errors.get(mid)
             saved = self.save_results.get(mid, {})
             draft = None
             verification_error = None
@@ -162,14 +188,19 @@ class ToolRegistry:
                 status = "DRAFT_SAVED" if draft and draft["draft_id"] == saved["draft_id"] and not verification_error else "INCOMPLETE"
             elif saved.get("status") == "SAVE_FAILED":
                 status = "SAVE_FAILED"
-            elif review and review.review_status != "PASS":
-                status = review.review_status
-            elif mid in self.not_found:
-                status = "NOT_FOUND"
             else:
                 status = "INCOMPLETE"
+            # Persistence and current eligibility are independent. A committed
+            # draft cannot override missing, failed, or newly blocked review.
+            if mid in self.not_found:
+                status = "NOT_FOUND"
+            elif review and review.review_status != "PASS":
+                status = review.review_status
+            elif not review or review_error:
+                status = "INCOMPLETE"
             current_draft_valid = status == "DRAFT_SAVED" and schedule_check and schedule_check["available"]
-            blockers = self._schedule_blockers(mid, saved, schedule_check) if not current_draft_valid and status not in {"NEEDS_INFO", "NEEDS_REVIEW", "BLOCKED", "NOT_FOUND"} else []
+            review_ready = review is not None and review.review_status == "PASS" and not review_error and mid not in self.not_found
+            blockers = self._schedule_blockers(mid, saved, schedule_check) if review_ready and not current_draft_valid else []
             if status != "SAVE_FAILED" and verification_error is None and any(b["requires_user_input"] for b in blockers):
                 status = "NEEDS_CONFIRMATION"
             # A successful, still-valid pending draft needs confirmation of its exact time.
@@ -180,11 +211,20 @@ class ToolRegistry:
                 pending.append("Explicit user confirmation for the alternative time")
             if review and review.review_status != "PASS":
                 pending.extend(review.risk_reasons)
+            if review_error:
+                pending.append("Restore the evidence source, read the material if needed, and check review rules again")
+            elif mid in self.not_found:
+                pending.append("Provide an existing material ID or restore the missing material")
+            elif not review:
+                pending.append("Read current material metadata and complete review before scheduling")
+            save_error = ({"code": saved.get("error_code", saved.get("status")), "message": saved["error"]}
+                          if saved.get("error") else None)
             outcomes.append({"material_id": mid, "status": status,
                              "review": review.model_dump(mode="json") if review else None,
                              "original_publish_time": self.request.requested_publish_time.isoformat(),
                              "suggested_publish_time": draft["suggested_publish_time"] if status == "DRAFT_SAVED" else None,
                              "pending_items": pending, "schedule_blockers": blockers, "schedule_check": schedule_check,
                              "save_status": saved.get("status", "NOT_ATTEMPTED"), "draft": draft,
+                             "save_error": save_error, "review_error": review_error,
                              "verification_error": verification_error})
         return outcomes

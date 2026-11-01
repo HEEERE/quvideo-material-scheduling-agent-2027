@@ -1,0 +1,14 @@
+[
+  {
+    "run_id": "run_98b60fde63184903bc12836fe69b4f8d",
+    "case_id": "schedule_sync",
+    "execution_mode": "maintenance",
+    "timestamp": "2026-11-01T14:56:05.325290+00:00",
+    "model_name": "no-model",
+    "event_type": "schedule_sync",
+    "step_index": 0,
+    "selected_action": "sync_schedules",
+    "execution_status": "SYNCHRONIZED",
+    "next_action": "finish"
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "request_id": "business-confirmation_slot_changed",
+  "material_ids": [
+    "M01"
+  ],
+  "target_channel": "TikTok",
+  "market": "US",
+  "timezone": "America/New_York",
+  "requested_publish_time": "2027-01-15T18:00:00-05:00",
+  "hard_time_constraint": true,
+  "flexible_time_window": {
+    "start": "2027-01-15T18:00:00-05:00",
+    "end": "2027-01-15T21:00:00-05:00"
+  },
+  "user_confirmations": [
+    {
+      "material_id": "M01",
+      "target_time": "2027-01-15T19:00:00-05:00",
+      "confirmed_at": "2026-11-01T14:56:09.829524+00:00",
+      "source": "explicit_user_input"
+    }
+  ]
+}

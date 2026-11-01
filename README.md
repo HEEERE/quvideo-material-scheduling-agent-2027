@@ -6,16 +6,19 @@
 
 ## 评审快速入口
 
+当前状态一致性更新已用本轮真实模型和离线两类记录复验，覆盖同批建议冲突、当前审核状态、保存错误与评估目录解析。另增加模拟运营人员确认、确认后占用变化、多素材及本地化操作，见 [状态一致性修复](docs/08-state-consistency-fixes.md) 和 [业务模拟报告](docs/09-business-simulation.md)。
+
 | 交付项 | 可核查结果 |
 |---|---|
-| 工程测试 | [95 passed](examples/test-results.txt) |
-| 六场景真实模型验证 | [6/6，DeepSeek deepseek-flash](examples/evidence/live_20261101T142648Z_b223f7aa/evaluation.json) |
-| 离线验证 | [6/6，明确标为 Mock](examples/evidence/mock_20261101T142651Z_2bd9c46b/evaluation.json) |
-| 真实正常路径 | [原始 Trace](examples/evidence/live_20261101T142648Z_b223f7aa/run_6b9cef3f6ce14f02a95b9cf8138d440b/trace.json) |
-| 真实冲突路径 | [原始 Trace](examples/evidence/live_20261101T142648Z_b223f7aa/run_c1ed76dd39534e1f9d62fc5ddf29264e/trace.json) |
+| 工程测试 | [114 passed](examples/test-results.txt) |
+| 六场景真实模型验证 | [6/6，DeepSeek deepseek-flash](examples/evidence/live_20261101T145550Z_831feb5a/evaluation.json) |
+| 离线验证 | [6/6，明确标为 Mock](examples/evidence/mock_20261101T145551Z_d7b2838e/evaluation.json) |
+| 真实正常路径 | [原始 Trace](examples/evidence/live_20261101T145550Z_831feb5a/run_22cf3539e0cc4e9db66fe2b090d5e35b/trace.json) |
+| 真实冲突路径 | [原始 Trace](examples/evidence/live_20261101T145550Z_831feb5a/run_9999cf875b134a4a8f22a70e8cdae1c2/trace.json) |
 | 真实错误与恢复 | [模型错误确认状态被 Guard 拒绝并改正](examples/evidence/live_20261101T133154Z_18c0964f/evaluation.json) |
 | 逐项验收与限制 | [评估矩阵](docs/03-evaluation.md) |
-| 本次审核问题修复 | [真实模型 2/2](examples/evidence/review_live_20261101T142650Z_624f8ade/regressions.json)、[修复说明](docs/07-review-fixes.md) |
+| 本次审核问题修复 | [真实模型 2/2](examples/evidence/review_live_20261101T145545Z_4e957c40/regressions.json)、[修复说明](docs/07-review-fixes.md) |
+| 模拟运营流程 | [真实模型 5/5](examples/evidence/business_live_20261101T145550Z_26cae819/business.json)、[离线对照](examples/evidence/business_mock_20261101T145605Z_4bf2e16e/business.json) |
 
 ## 安装
 
@@ -65,6 +68,8 @@ python -m src.evaluation --mode mock
 python -m src.evaluation --mode live
 python -m src.review_evaluation --mode mock
 python -m src.review_evaluation --mode live
+python scripts/business_simulation.py --mode mock
+python scripts/business_simulation.py --mode live
 ```
 
 评估器为每个案例建立独立数据库，避免跨案例占位；duplicate 在两个独立 Python 进程中复用数据库。每次生成新的批次目录，不覆盖旧事件。保存异常案例会显式注入提交前故障。单独体验该案例：
@@ -89,7 +94,9 @@ python -m src.main --sync-schedules data/schedules.json --db runs/drafts.db
 
 CLI 输出 JSON 包括审核证据、原时间、建议时间、待确认项、schedule_blockers、当前 schedule_check、真实保存结果、执行状态、实际 token usage 和 Trace 文件路径。缺少授权调整窗口的冲突返回 NEEDS_CONFIRMATION，并列出所需输入。每次运行有 UUID run_id，生成 `events.jsonl`、`trace.json`、`result.json`；最终批次还记录代码与数据哈希。
 
-审核状态为 PASS / NEEDS_INFO / NEEDS_REVIEW / BLOCKED。保存工具为 SAVED / ALREADY_EXISTS / SAVE_FAILED / REJECTED_BY_POLICY。草稿 READY 与 AWAITING_CONFIRMATION 均未发布；硬性时间的替代必须待用户确认。相同渠道市场、开始时间相距严格小于 60 分钟发生冲突；待确认建议不占位，READY 草稿占位。
+审核状态为 PASS / NEEDS_INFO / NEEDS_REVIEW / BLOCKED。保存工具为 SAVED / ALREADY_EXISTS / SAVE_FAILED / REJECTED_BY_POLICY。草稿 READY 与 AWAITING_CONFIRMATION 均未发布；硬性时间的替代必须待用户确认。相同渠道市场、开始时间相距严格小于 60 分钟发生冲突；READY 草稿占位，待确认建议不占用其他请求的时段，但同一请求内的建议必须互不冲突。
+
+最终结果区分当前审核结论与最近一次保存结果：素材变化、缺失或审核异常后，不再沿用先前的 DRAFT_SAVED 推荐。历史草稿仍保留在数据库；save_error 给出保存拒绝或失败原因，review_error 给出证据读取或审核异常，恢复后需重新审核再重试。
 
 COMPLETED 表示所有素材得到明确处理结果，可能包含阻断或保存失败。退出码：0 已处理、2 配置或运行失败、3 未完成或预算耗尽、4 保存失败。`--max-steps`、`--max-tool-calls`、`--timeout` 可限制执行；工具非法参数也计入预算。
 
@@ -102,7 +109,7 @@ COMPLETED 表示所有素材得到明确处理结果，可能包含阻断或保�
 - `guard.py`、`scheduler.py`、`storage.py`：确认边界、冲突校验与 SQLite 事务幂等。
 - `tracing.py`、`evaluation.py`：观测、脱敏、来源快照和实际验收。
 - [需求分析](docs/01-requirements.md)、[技术方案](docs/02-solution.md)、[评估报告](docs/03-evaluation.md)、[AI 使用记录](docs/04-ai-usage.md)、[真实复盘](docs/05-retrospective.md)。
-- [初次开发时间记录](docs/development-record.json)、[最新证据索引](docs/latest-evidence.json)、[GitHub 交付说明](docs/06-delivery.md)、[审核修复说明](docs/07-review-fixes.md)。
+- [初次开发时间记录](docs/development-record.json)、[最新证据索引](docs/latest-evidence.json)、[GitHub 交付说明](docs/06-delivery.md)、[审核修复说明](docs/07-review-fixes.md)、[状态一致性修复](docs/08-state-consistency-fixes.md)、[业务模拟报告](docs/09-business-simulation.md)。
 
 限制：当前是单机、合成元数据审核；没有视觉审核、真实许可查询、用户身份认证或生产发布。真实样本数量有限，案例通过不代表生产可靠性。CI 配置随仓库提供，实际远程执行状态以 GitHub 为准。
 

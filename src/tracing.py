@@ -9,6 +9,16 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
+def evidence_path(path: str | Path) -> str:
+    """Use portable repository links when possible, absolute links otherwise."""
+    resolved = Path(path).resolve()
+    root = Path(__file__).resolve().parents[1]
+    try:
+        return resolved.relative_to(root).as_posix()
+    except ValueError:
+        return resolved.as_posix()
+
+
 def safe(value):
     if isinstance(value, dict):
         return {k: "[REDACTED]" if any(s in k.lower() for s in ("api_key", "authorization", "password", "auth_token")) and k != "authorization_scope" else safe(v) for k, v in value.items()}

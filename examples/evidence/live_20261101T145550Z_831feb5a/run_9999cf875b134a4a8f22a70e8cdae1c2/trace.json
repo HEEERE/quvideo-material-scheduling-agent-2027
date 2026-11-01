@@ -1,0 +1,124 @@
+[
+  {
+    "run_id": "run_9999cf875b134a4a8f22a70e8cdae1c2",
+    "case_id": "conflict.input",
+    "execution_mode": "live",
+    "timestamp": "2026-11-01T14:56:31.447842+00:00",
+    "model_name": "deepseek-flash",
+    "event_type": "tool_result",
+    "step_index": 1,
+    "selected_action": "read_material",
+    "tool_name": "read_material",
+    "tool_call_id": "call_00_AphRsZr2jwXcgRQokkbO0741",
+    "tool_arguments": {
+      "material_id": "M01",
+      "reason_summary": "Read material M01 before review and scheduling."
+    },
+    "tool_response_summary": "{\"status\": \"OK\", \"material\": {\"material_id\": \"M01\", \"title\": \"AI Catch holiday transformation\", \"material_type\": \"template_promo\", \"content_theme\": \"holiday creativity\", \"target_product\": \"AI Catch\", \"target_market\": \"US\", \"language\": \"en\", \"target_channel\": \"TikTok\", \"copyright_status\": \"AUTHORIZED\", \"authorization_scope\": [\"TikTok:US\"], \"content_tags\": [\"holiday\"], \"review_metadata\": {\"has_promotional_claim\": true, \"claims_verified\": true, \"source\": \"synthetic_fixture\"}, \"missing_fields\": []}}",
+    "next_action": "check_review_rules",
+    "decision_reason_summary": "Read material M01 before review and scheduling.",
+    "execution_status": "OK",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_9999cf875b134a4a8f22a70e8cdae1c2",
+    "case_id": "conflict.input",
+    "execution_mode": "live",
+    "timestamp": "2026-11-01T14:56:33.632831+00:00",
+    "model_name": "deepseek-flash",
+    "event_type": "tool_result",
+    "step_index": 2,
+    "selected_action": "check_review_rules",
+    "tool_name": "check_review_rules",
+    "tool_call_id": "call_00_KJeSoUzELdZixJUZjI9z6559",
+    "tool_arguments": {
+      "material_id": "M01",
+      "reason_summary": "Apply deterministic review rules to material M01."
+    },
+    "tool_response_summary": "{\"material_id\": \"M01\", \"review_status\": \"PASS\", \"risk_level\": \"LOW\", \"risk_reasons\": [], \"matched_rules\": [], \"missing_fields\": [], \"requires_manual_review\": false}",
+    "next_action": "query_schedule",
+    "decision_reason_summary": "Apply deterministic review rules to material M01.",
+    "execution_status": "PASS",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_9999cf875b134a4a8f22a70e8cdae1c2",
+    "case_id": "conflict.input",
+    "execution_mode": "live",
+    "timestamp": "2026-11-01T14:56:35.860745+00:00",
+    "model_name": "deepseek-flash",
+    "event_type": "tool_result",
+    "step_index": 3,
+    "selected_action": "query_schedule",
+    "tool_name": "query_schedule",
+    "tool_call_id": "call_00_7B5u93kmUZlvI7YN8SKL5924",
+    "tool_arguments": {
+      "material_id": "M01",
+      "publish_time": "2027-01-15T18:00:00-05:00",
+      "reason_summary": "Check availability of the requested publish time for M01."
+    },
+    "tool_response_summary": "{\"available\": false, \"publish_time\": \"2027-01-15T18:00:00-05:00\", \"conflicts\": [{\"source\": \"formal\", \"id\": \"SYN-US-1800\", \"publish_time\": \"2027-01-15T23:00:00+00:00\"}], \"conflict_rule\": \"Same channel and market; start times less than 60 minutes apart conflict. READY drafts reserve globally; pending suggestions also conflict within this request, but do not reserve for other requests.\", \"search_window\": {\"start\": \"2027-01-15T18:00:00-05:00\", \"end\": \"2027-01-15T21:00:00-05:00\"}, \"query_horizon_days\": 7, \"minimum_spacing_minutes\": 60, \"checked_at\": \"2026-11-01T14:56:35.858239+00:00\", \"candidate_time_hints\": [{\"publish_time\": \"2027-01-15T19:00:00-05:00\", \"availability\": \"UNVERIFIED\", \"basis\": \"User-window endpoint, observed conflict spacing boundary, or explicit confirmation\"}, {\"publish_time\": \"2027-01-15T21:00:00-05:00\", \"availability\": \"UNVERIFIED\", \"basis\": \"User-window endpoint, observed conflict spacing boundary, or explicit confirmation\"}], \"hint\": \"Exact minimum-spacing boundaries are legal. Candidate hints have NOT been checked for availability: choose and query them yourself. No alternative is implicitly approved.\"}",
+    "next_action": "query_schedule",
+    "decision_reason_summary": "Check availability of the requested publish time for M01.",
+    "execution_status": "OK",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_9999cf875b134a4a8f22a70e8cdae1c2",
+    "case_id": "conflict.input",
+    "execution_mode": "live",
+    "timestamp": "2026-11-01T14:56:39.424420+00:00",
+    "model_name": "deepseek-flash",
+    "event_type": "tool_result",
+    "step_index": 4,
+    "selected_action": "query_schedule",
+    "tool_name": "query_schedule",
+    "tool_call_id": "call_00_e18nlTJnzIhifd5ksbha2069",
+    "tool_arguments": {
+      "material_id": "M01",
+      "publish_time": "2027-01-15T19:00:00-05:00",
+      "reason_summary": "Query the 19:00 boundary alternative inside the user window."
+    },
+    "tool_response_summary": "{\"available\": true, \"publish_time\": \"2027-01-15T19:00:00-05:00\", \"conflicts\": [], \"conflict_rule\": \"Same channel and market; start times less than 60 minutes apart conflict. READY drafts reserve globally; pending suggestions also conflict within this request, but do not reserve for other requests.\", \"search_window\": {\"start\": \"2027-01-15T18:00:00-05:00\", \"end\": \"2027-01-15T21:00:00-05:00\"}, \"query_horizon_days\": 7, \"minimum_spacing_minutes\": 60, \"checked_at\": \"2026-11-01T14:56:39.422417+00:00\", \"candidate_time_hints\": [], \"hint\": \"Exact minimum-spacing boundaries are legal. Candidate hints have NOT been checked for availability: choose and query them yourself. No alternative is implicitly approved.\"}",
+    "next_action": "save_schedule_draft",
+    "decision_reason_summary": "Query the 19:00 boundary alternative inside the user window.",
+    "execution_status": "OK",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_9999cf875b134a4a8f22a70e8cdae1c2",
+    "case_id": "conflict.input",
+    "execution_mode": "live",
+    "timestamp": "2026-11-01T14:56:42.302122+00:00",
+    "model_name": "deepseek-flash",
+    "event_type": "tool_result",
+    "step_index": 5,
+    "selected_action": "save_schedule_draft",
+    "tool_name": "save_schedule_draft",
+    "tool_call_id": "call_00_M5y6Z41aDtgsjAn09cAY2484",
+    "tool_arguments": {
+      "material_id": "M01",
+      "reason_summary": "Save pending alternative at 19:00 within the user window after verifying availability.",
+      "suggested_publish_time": "2027-01-15T19:00:00-05:00",
+      "confirmation_status": "PENDING"
+    },
+    "tool_response_summary": "{\"status\": \"SAVED\", \"action\": \"CREATED\", \"draft_id\": \"draft_4b0e709c594c4accaaf041b393974264\", \"draft\": {\"draft_id\": \"draft_4b0e709c594c4accaaf041b393974264\", \"request_fingerprint\": \"fd55322c6b27cbdf78d43f9c0c5e257e6526a967b9e5b9f9533946d7f3030f93\", \"material_id\": \"M01\", \"original_publish_time\": \"2027-01-15T18:00:00-05:00\", \"suggested_publish_time\": \"2027-01-15T19:00:00-05:00\", \"target_channel\": \"TikTok\", \"market\": \"US\", \"timezone\": \"America/New_York\", \"confirmation_status\": \"PENDING\", \"review_status\": \"PASS\", \"draft_status\": \"AWAITING_CONFIRMATION\", \"risk_reasons\": [], \"confirmation_evidence\": [], \"created_at\": \"2026-11-01T14:56:42.283968Z\", \"updated_at\": \"2026-11-01T14:56:42.283968Z\", \"revision\": 1}, \"schedule_check\": {\"available\": true, \"publish_time\": \"2027-01-15T19:00:00-05:00\", \"conflicts\": [], \"conflict_rule\": \"Same channel and market; start times less than 60 minutes apart conflict. READY drafts reserve globally; pending suggestions also conflict within this request, but do not reserve for other requests.\", \"search_window\": {\"start\": \"2027-01-15T18:00:00-05:00\", \"end\": \"2027-01-15T21:00:00-05:00\"}, \"query_horizon_days\": 7, \"minimum_spacing_minutes\": 60, \"checked_at\": \"2026-",
+    "next_action": "finish",
+    "decision_reason_summary": "Save pending alternative at 19:00 within the user window after verifying availability.",
+    "execution_status": "SAVED",
+    "error_summary": null
+  },
+  {
+    "run_id": "run_9999cf875b134a4a8f22a70e8cdae1c2",
+    "case_id": "conflict.input",
+    "execution_mode": "live",
+    "timestamp": "2026-11-01T14:56:45.782711+00:00",
+    "model_name": "deepseek-flash",
+    "event_type": "model_final",
+    "step_index": 6,
+    "selected_action": "finish",
+    "execution_status": "MODEL_FINISHED",
+    "decision_reason_summary": "Model ended tool selection; business outcome is derived independently",
+    "next_action": "finish"
+  }
+]
